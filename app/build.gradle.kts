@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.example.unplayedgameslist"
-    compileSdk = 34
+    compileSdk = 35
 
     buildFeatures{
         viewBinding = true
@@ -14,8 +14,8 @@ android {
 
     defaultConfig {
         applicationId = "com.example.unplayedgameslist"
-        minSdk = 28
-        targetSdk = 34
+        minSdk = 30
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
