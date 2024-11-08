@@ -8,6 +8,10 @@ android {
     namespace = "com.example.unplayedgameslist"
     compileSdk = 34
 
+    buildFeatures{
+        viewBinding = true
+    }
+
     defaultConfig {
         applicationId = "com.example.unplayedgameslist"
         minSdk = 28
