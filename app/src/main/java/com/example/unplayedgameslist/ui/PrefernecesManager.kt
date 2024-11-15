@@ -2,6 +2,7 @@ package com.example.unplayedgameslist.ui
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 
@@ -29,7 +30,6 @@ class PrefernecesManager(context: Context) {
         private const val KEY_STEAM_API = "SteamAPI"
     }
 
-
     // Método para guardar los datos encriptados
     fun saveData(steamID: String, password: String, steamAPI: String) {
         prefs.edit().apply {
@@ -37,6 +37,7 @@ class PrefernecesManager(context: Context) {
             putString(KEY_PASSWORD, password)
             putString(KEY_STEAM_API, steamAPI)
             apply()
+            Log.d("PrefsManager", "Datos guardados: SteamID=$steamID, Password=$password, SteamAPI=$steamAPI")
         }
     }
 
@@ -48,6 +49,11 @@ class PrefernecesManager(context: Context) {
     // Obtiene la contraseña descifrada desde las preferencias compartidas.
     fun getPassword(): String? {
         return prefs.getString(KEY_PASSWORD, null)
+    }
+
+    // Obtiene la SteamAPI descifrada desde las preferencias compartidas.
+    fun getSteamAPI(): String? {
+        return prefs.getString(KEY_STEAM_API, null)
     }
 }
 

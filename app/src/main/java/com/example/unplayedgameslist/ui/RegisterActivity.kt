@@ -1,6 +1,7 @@
 package com.example.unplayedgameslist.ui
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -17,11 +18,12 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var binding : ActivityRegisterBinding
     private lateinit var prefs : PrefernecesManager
 
-    // Algunas constantes globales para esta actividad
-    private val INCORRECT_USER_MESSAGE : String = "ERROR: el usuario ya existe"
-    private val INCORRECT_API_FORMAT : String =
-        "ERROR: formato de clave API invalido, debe tener 32 carácteres de longitud y carácteres" +
-                "alfanuméricos"
+    // Constantes globales
+    companion object {
+        private const val INCORRECT_USER_MESSAGE: String = "ERROR: el usuario ya existe"
+        private const val INCORRECT_API_FORMAT: String = "ERROR: formato de clave API invalido, debe tener 32 carácteres de longitud y carácteres alfanuméricos"
+        private const val REGISTER_SUCCESSFUL: String = "Registración de SteamID y API KEY Completados"
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,15 +45,29 @@ class RegisterActivity : AppCompatActivity() {
     private fun registerAction(){
         // Le he puesto 2 veces register para diferenciarlo de la otra... no muy original.
         val etSteamId = binding.etSteamIDRegister
+        val etSteamPassword = binding.etPasswordRegister
         val etApiKey = binding.etSteamApi
 
-        if(!etSteamId.text.equals(prefs.getSteamID())){
-            Toast.makeText(this, INCORRECT_USER_MESSAGE, Toast.LENGTH_SHORT).show()
+        val steamId = etSteamId.text.toString()
+        if (steamId.isEmpty()) {
+            Toast.makeText(this, "SteamID no puede estar vacío", Toast.LENGTH_SHORT).show()
             return
         }
-        else if(!isValidApiKey(etApiKey.text.toString())){
+
+        // Validar API Key
+        val apiKey = etApiKey.text.toString()
+        if (!isValidApiKey(apiKey)) {
             Toast.makeText(this, INCORRECT_API_FORMAT, Toast.LENGTH_SHORT).show()
+            return // Detener la ejecución si la API Key es incorrecta
         }
+
+        prefs.saveData(
+            etSteamId.text.toString(),
+            etSteamPassword.text.toString(),
+            etApiKey.text.toString())
+
+        Toast.makeText(this, REGISTER_SUCCESSFUL, Toast.LENGTH_SHORT).show()
+        finish()
     }
 
     private fun isValidApiKey(apiKey : String) :Boolean {
