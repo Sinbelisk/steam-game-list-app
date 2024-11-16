@@ -3,7 +3,6 @@ package com.example.unplayedgameslist
 import android.app.Application
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.unplayedgameslist.data.api.RetrofitInstance
 import com.example.unplayedgameslist.data.api.SteamApiService
 import com.example.unplayedgameslist.data.db.GameDatabase
 import com.example.unplayedgameslist.data.repository.ApiDataSource
