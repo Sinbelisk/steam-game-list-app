@@ -6,6 +6,8 @@ import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "games")
 data class Game(
+    // Clase de datos, es compartida tanto por la API como por la base de datos.
+
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,  // ID autogenerado para la base de datos
 
