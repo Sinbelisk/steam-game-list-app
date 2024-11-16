@@ -11,7 +11,7 @@ data class ApiGameModel(
 )
 {
     fun getImageUrl(): String {
-        val imageUrl = "http://media.steampowered.com/steamcommunity/public/images/apps/$appId/$imgIconUrl.jpg"
+        val imageUrl = "https://media.steampowered.com/steamcommunity/public/images/apps/$appId/$imgIconUrl.jpg"
         Log.d("ImageUrl", "Generated Image URL: $imageUrl")  // Verifica si la URL es correcta
         return imageUrl
     }
