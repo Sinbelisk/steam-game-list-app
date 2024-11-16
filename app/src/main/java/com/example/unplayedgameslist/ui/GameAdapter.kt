@@ -18,11 +18,11 @@ class GameAdapter(private val games: List<GameEntity>) : RecyclerView.Adapter<Ga
         private val gameGenre: TextView = itemView.findViewById(R.id.gameGenre)
         private val gameImage: ImageView = itemView.findViewById(R.id.gameImage)
 
-        // "bindear" el juego a la interfaz
+        // "Bindear" el juego a la interfaz
         fun bind(game: GameEntity) {
             gameName.text = game.name
-            gameGenre.text = game.genre ?: "N/A"
-            Picasso.get().load(game.imageUrl).into(gameImage)
+            gameGenre.text = game.genre ?: "N/A"  // En caso de que el género sea nulo
+            Picasso.get().load(game.imageUrl).into(gameImage)  // Cargar la imagen desde la URL
         }
     }
 
@@ -33,8 +33,8 @@ class GameAdapter(private val games: List<GameEntity>) : RecyclerView.Adapter<Ga
 
     override fun onBindViewHolder(holder: GameViewHolder, position: Int) {
         val game = games[position]
-        holder.bind(game)
+        holder.bind(game)  // Asocia el juego de la lista con la vista
     }
 
-    override fun getItemCount(): Int = games.size
+    override fun getItemCount(): Int = games.size  // Devuelve el tamaño de la lista de juegos
 }

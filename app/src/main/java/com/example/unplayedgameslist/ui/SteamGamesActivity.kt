@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.unplayedgameslist.App
 import com.example.unplayedgameslist.R
 
 class SteamGamesActivity : AppCompatActivity() {
@@ -35,7 +36,7 @@ class SteamGamesActivity : AppCompatActivity() {
             recyclerView.adapter = gameAdapter
         })
 
-        // Cargar juegos desde la API o base de datos
-        gameViewModel.loadGames()
+        val prefs = App.prefsManager
+        gameViewModel.loadGames(prefs.getSteamAPI()!!, prefs.getSteamID()!!)
     }
 }
