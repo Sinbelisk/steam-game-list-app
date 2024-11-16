@@ -10,9 +10,17 @@ import com.example.unplayedgameslist.data.model.Game
 
 @Dao
 interface GameDao {
-    // Insertar múltiples juegos
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(games: List<Game>)
+    @Insert
+    suspend fun insertGame(game: Game)
+
+    @Update
+    suspend fun update(game: Game)
+
+    @Delete
+    suspend fun delete(game: Game)
+
+    @Query("DELETE FROM games")
+    suspend fun deleteAllGames()
 
     // Obtener juegos por estado
     @Query("SELECT * FROM games WHERE status = :status")
@@ -22,19 +30,7 @@ interface GameDao {
     @Query("SELECT * FROM games")
     suspend fun getAllGames(): List<Game>
 
-    // Actualizar un juego
-    @Update
-    suspend fun update(game: Game)
-
-    // Eliminar un juego
-    @Delete
-    suspend fun delete(game: Game)
-
-    // Eliminar todos los juegos
-    @Query("DELETE FROM games")
-    suspend fun deleteAllGames()
-
     // Buscar un juego por su ID
-    @Query("SELECT * FROM games WHERE id = :id LIMIT 1")
+    @Query("SELECT * FROM games WHERE id = :id")
     suspend fun getGameById(id: Long): Game?
 }
