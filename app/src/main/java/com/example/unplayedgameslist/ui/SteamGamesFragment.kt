@@ -29,7 +29,7 @@ class SteamGamesFragment : Fragment() {
         // Configura el RecyclerView
         recyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(context) // Set the LayoutManager
-        gameAdapter = GameAdapter(emptyList())
+        gameAdapter = GameAdapter(emptyList(), requireContext())
         recyclerView.adapter = gameAdapter
 
         // Configura el ViewModel

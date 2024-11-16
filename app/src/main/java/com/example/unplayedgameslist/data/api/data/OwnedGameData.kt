@@ -1,9 +1,9 @@
-package com.example.unplayedgameslist.data.api
+package com.example.unplayedgameslist.data.api.data
 
 import android.util.Log
 import com.google.gson.annotations.SerializedName
 
-data class ApiGameModel(
+data class OwnedGameData(
     @SerializedName("appid") val appId: Int,
     @SerializedName("name") val name: String?,
     @SerializedName("playtime_forever") val playtimeForever: Int,
@@ -15,5 +15,4 @@ data class ApiGameModel(
         Log.d("ImageUrl", "Generated Image URL: $imageUrl")  // Verifica si la URL es correcta
         return imageUrl
     }
-
 }

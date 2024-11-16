@@ -1,7 +1,6 @@
 package com.example.unplayedgameslist.data.repository
 
-import com.example.unplayedgameslist.data.DbApiMapper.Companion.toEntity
-import com.example.unplayedgameslist.data.api.ApiGameModel
+import com.example.unplayedgameslist.data.api.data.OwnedGameData
 import com.example.unplayedgameslist.data.db.GameEntity
 
 import android.util.Log
@@ -15,7 +14,7 @@ class GameRepository(
     }
 
     // Obtener todos los juegos desde la API
-    suspend fun fetchAllGamesFromApi(apiKey: String, steamId: String): List<ApiGameModel> {
+    suspend fun fetchAllGamesFromApi(apiKey: String, steamId: String): List<OwnedGameData> {
         return try {
             Log.d(TAG, "Fetching all games from API...")
             val games = apiDataSource.fetchOwnedGames(apiKey, steamId)

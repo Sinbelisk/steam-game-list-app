@@ -1,6 +1,6 @@
 package com.example.unplayedgameslist.data
 
-import com.example.unplayedgameslist.data.api.ApiGameModel
+import com.example.unplayedgameslist.data.api.data.OwnedGameData
 import com.example.unplayedgameslist.data.db.GameEntity
 
 class DbApiMapper {
@@ -9,7 +9,7 @@ class DbApiMapper {
      */
 
     companion object{
-        fun ApiGameModel.toEntity(status: String? = null): GameEntity {
+        fun OwnedGameData.toEntity(status: String? = null): GameEntity {
             val imageUrl = this.getImageUrl()
             return GameEntity(
                 id = 0,  // Se autogenera en la base de datos
@@ -24,8 +24,8 @@ class DbApiMapper {
         }
 
 
-        fun GameEntity.toApiModel(): ApiGameModel {
-            return ApiGameModel(
+        fun GameEntity.toApiModel(): OwnedGameData {
+            return OwnedGameData(
                 appId = this.steamId,
                 name = this.name,
                 imgIconUrl = this.imageUrl,

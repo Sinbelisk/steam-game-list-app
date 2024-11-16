@@ -1,7 +1,7 @@
-package com.example.unplayedgameslist.data.api
+package com.example.unplayedgameslist.data.api.responses
 
 import com.google.gson.annotations.SerializedName
 
-class ApiOwnedGamesResponse(
+class OwnedGamesResponse(
     @SerializedName("response") val response: ApiGamesResponse
 )

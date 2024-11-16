@@ -23,15 +23,23 @@
             android:id="@+id/gameName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Game Name"
+            android:text="@string/gameName"
             android:textSize="16sp"
             android:textStyle="bold"/>
 
         <TextView
-            android:id="@+id/gameGenre"
+            android:id="@+id/gamePlayedHours"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Genre"
+            android:text="@string/playedHours"
+            android:textSize="14sp"
+            android:textColor="@android:color/darker_gray"/>
+
+        <TextView
+            android:id="@+id/status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/gameState"
             android:textSize="14sp"
             android:textColor="@android:color/darker_gray"/>
     </LinearLayout>

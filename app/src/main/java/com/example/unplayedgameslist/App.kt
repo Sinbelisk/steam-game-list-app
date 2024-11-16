@@ -1,6 +1,7 @@
 package com.example.unplayedgameslist
 
 import android.app.Application
+import android.content.Context
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.unplayedgameslist.data.api.SteamApiService
@@ -17,6 +18,7 @@ class App : Application() {
     companion object {
         private const val STEAM_BASE_URL : String = "https://api.steampowered.com/"
         private const val DATABASE_NAME : String = "game_database"
+        private  var context: Context? ? = null
 
         lateinit var prefsManager: PrefernecesManager
         lateinit var gameRepository: GameRepository
