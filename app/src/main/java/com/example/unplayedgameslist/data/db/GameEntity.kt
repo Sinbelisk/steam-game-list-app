@@ -2,7 +2,6 @@ package com.example.unplayedgameslist.data.db
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "games")
 data class GameEntity(
@@ -19,7 +18,7 @@ data class GameEntity(
 
     val imageUrl: String?,  // URL de la imagen del juego (opcional)
 
-    val playtime: Int = 0,  // Tiempo de juego en minutos
+    val playtime: Int? = 0,  // Tiempo de juego en minutos
 
     val status: String?  // Estado local del juego (por ejemplo, "pending", "in progress", etc.)
 )

@@ -5,7 +5,6 @@ import com.example.unplayedgameslist.data.db.GameEntity
 
 import android.util.Log
 import com.example.unplayedgameslist.data.api.data.GameDetailData
-import com.example.unplayedgameslist.data.api.responses.GameDetailResponse
 
 class GameRepository(
     private val apiDataSource: ApiDataSource,
@@ -62,26 +61,5 @@ class GameRepository(
         } catch (e: Exception) {
             Log.e(TAG, "Error saving games to DB", e)
         }
-    }
-
-    // Sincronizar datos entre API y base de datos
-    suspend fun syncGames(apiKey: String, steamId: String) {
-        val apiGames = fetchAllGamesFromApi(apiKey, steamId)
-        val dbGames = fetchAllGamesFromDB()
-
-        // Convierte los juegos de la API en entidades para la base de datos
-        val gamesToSave = apiGames.map { apiGame ->
-            GameEntity(
-                id = apiGame.appId.toLong(),
-                name = apiGame.name.orEmpty(),
-                playtime = apiGame.playtimeForever,
-                iconUrl = apiGame.getImageUrl()
-            )
-        }
-
-        // Actualiza la base de datos
-        saveGamesToDB(gamesToSave)
-
-        Log.d(TAG, "Sync complete: API games ${apiGames.size}, DB games ${dbGames.size}")
     }
 }
