@@ -7,7 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.unplayedgameslist.App
-import com.example.unplayedgameslist.data.model.Game
+import com.example.unplayedgameslist.data.db.GameEntity
 import com.example.unplayedgameslist.data.repository.GameRepository
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
@@ -16,11 +16,11 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: GameRepository = App.gameRepository
 
-    private val _gamesLiveData = MutableLiveData<List<Game>>()
-    val gamesLiveData: LiveData<List<Game>> get() = _gamesLiveData
+    private val _gamesLiveData = MutableLiveData<List<GameEntity>>()
+    val gamesLiveData: LiveData<List<GameEntity>> get() = _gamesLiveData
 
-    private val _gameDetailsLiveData = MutableLiveData<Game>()
-    val gameDetailsLiveData: LiveData<Game> get() = _gameDetailsLiveData
+    private val _gameDetailsLiveData = MutableLiveData<GameEntity>()
+    val gameDetailsLiveData: LiveData<GameEntity> get() = _gameDetailsLiveData
 
     // Cargar todos los juegos
     fun loadGames() {
@@ -54,7 +54,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
 
 
     // Actualizar un juego
-    fun updateGame(game: Game) {
+    fun updateGame(game: GameEntity) {
         viewModelScope.launch {
             try {
                 repository.updateGame(game)

@@ -1,6 +1,6 @@
 package com.example.unplayedgameslist.data.repository
 
-import com.example.unplayedgameslist.data.model.Game
+import com.example.unplayedgameslist.data.db.GameEntity
 
 class GameRepository(
     private val apiDataSource: ApiDataSource,
@@ -8,16 +8,16 @@ class GameRepository(
 ) {
 
     // Obtener todos los juegos. Primero intenta obtener de la base de datos, luego de la API si es necesario
-    suspend fun getAllGames(): List<Game> {
+    suspend fun getAllGames(): List<GameEntity> {
         return fetchGamesFromLocalOrRemote { dbDataSource.getAllGames() }
     }
 
     // Obtener los detalles de un juego, preferir primero la base de datos, luego la API
-    suspend fun getGameDetails(steamId: Long): Game {
+    suspend fun getGameDetails(steamId: Long): GameEntity {
         return fetchGameBySteamId(steamId) { dbDataSource.getGameBySteamId(steamId) }
     }
 
-    private suspend fun fetchGameBySteamId(steamId: Long, fromDB: suspend () -> Game?): Game {
+    private suspend fun fetchGameBySteamId(steamId: Long, fromDB: suspend () -> GameEntity?): GameEntity {
         val localGame = fromDB()
         if (localGame != null) {
             return localGame
@@ -28,7 +28,7 @@ class GameRepository(
         }
     }
 
-    private suspend fun fetchGamesFromLocalOrRemote(fromDB: suspend () -> List<Game>): List<Game> {
+    private suspend fun fetchGamesFromLocalOrRemote(fromDB: suspend () -> List<GameEntity>): List<GameEntity> {
         val localGames = fromDB()
         return if (localGames.isNotEmpty()) {
             localGames
@@ -40,7 +40,7 @@ class GameRepository(
     }
 
     // Actualizar el progreso del juego
-    suspend fun updateGame(game: Game) {
+    suspend fun updateGame(game: GameEntity) {
         dbDataSource.updateGame(game)
     }
 }

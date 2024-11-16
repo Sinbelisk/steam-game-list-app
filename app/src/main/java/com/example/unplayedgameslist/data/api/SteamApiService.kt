@@ -1,8 +1,6 @@
 package com.example.unplayedgameslist.data.api
 
-import com.example.unplayedgameslist.data.model.Game
 import retrofit2.http.GET
-import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface SteamApiService {
