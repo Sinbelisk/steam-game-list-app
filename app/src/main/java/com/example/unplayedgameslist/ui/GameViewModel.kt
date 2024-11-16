@@ -10,6 +10,7 @@ import com.example.unplayedgameslist.App
 import com.example.unplayedgameslist.data.model.Game
 import com.example.unplayedgameslist.data.repository.GameRepository
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 
 class GameViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -34,18 +35,23 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    // Cargar detalles de un juego
     fun loadGameDetails(steamId: Long) {
         viewModelScope.launch {
             try {
+                Log.d("GameViewModel", "Cargando detalles para Steam ID: $steamId")
                 val game = repository.getGameDetails(steamId)
                 _gameDetailsLiveData.postValue(game)
+            } catch (e: HttpException) {
+                Log.e("GameViewModel", "Error HTTP: ${e.code()} - ${e.message()}", e)
+                if (e.code() == 404) {
+                    Log.e("GameViewModel", "Juego no encontrado en el servidor (404)")
+                }
             } catch (e: Exception) {
-                // Manejar errores
                 Log.e("GameViewModel", "Error al cargar el juego", e)
             }
         }
     }
+
 
     // Actualizar un juego
     fun updateGame(game: Game) {
