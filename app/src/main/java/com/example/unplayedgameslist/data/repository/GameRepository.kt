@@ -4,25 +4,39 @@ import com.example.unplayedgameslist.data.api.data.OwnedGameData
 import com.example.unplayedgameslist.data.db.GameEntity
 
 import android.util.Log
+import com.example.unplayedgameslist.data.api.data.GameDetailData
+import com.example.unplayedgameslist.data.api.responses.GameDetailResponse
 
 class GameRepository(
     private val apiDataSource: ApiDataSource,
     private val dbDataSource: DBDataSource
 ) {
     companion object {
-        private const val TAG = "GameRepository" // Etiqueta para los logs
+        private const val TAG = "GameRepository"
     }
 
     // Obtener todos los juegos desde la API
     suspend fun fetchAllGamesFromApi(apiKey: String, steamId: String): List<OwnedGameData> {
         return try {
             Log.d(TAG, "Fetching all games from API...")
-            val games = apiDataSource.fetchOwnedGames(apiKey, steamId)
+            val games = apiDataSource.fetchOwnedGames(apiKey, steamId) ?: emptyList()
             Log.d(TAG, "Successfully fetched ${games.size} games from API.")
             games
         } catch (e: Exception) {
             Log.e(TAG, "Error fetching games from API", e)
-            emptyList() // Retorna una lista vacía en caso de error
+            emptyList()
+        }
+    }
+
+    // Obtener detalles de un juego desde la API
+    suspend fun fetchGameDetails(appId: Int): GameDetailData? {
+        return try {
+            Log.d(TAG, "Fetching details for game with appId: $appId")
+            val response = apiDataSource.fetchGameDetails(appId)
+            response?.body()?.get(appId.toString())?.data
+        } catch (e: Exception) {
+            Log.e(TAG, "Error fetching game details from API", e)
+            null
         }
     }
 
@@ -35,31 +49,39 @@ class GameRepository(
             games
         } catch (e: Exception) {
             Log.e(TAG, "Error fetching games from DB", e)
-            emptyList() // Retorna una lista vacía en caso de error
+            emptyList()
         }
     }
 
-    // Insertar un juego individual en la base de datos
-    suspend fun insertGameIntoDB(game: GameEntity) {
+    // Guardar o actualizar todos los juegos en la base de datos
+    suspend fun saveGamesToDB(games: List<GameEntity>) {
         try {
-            Log.d(TAG, "Inserting game into DB: ${game.name}")
-            dbDataSource.insertGame(game)
-            Log.d(TAG, "Successfully inserted game: ${game.name} into DB.")
+            Log.d(TAG, "Saving ${games.size} games to DB...")
+            dbDataSource.insertAll(games)
+            Log.d(TAG, "Successfully saved games to DB.")
         } catch (e: Exception) {
-            Log.e(TAG, "Error inserting game into DB", e)
+            Log.e(TAG, "Error saving games to DB", e)
         }
     }
 
-    // Eliminar un juego individual de la base de datos
-    suspend fun deleteGameFromDB(game: GameEntity) {
-        try {
-            Log.d(TAG, "Deleting game from DB: ${game.name}")
-            dbDataSource.deleteGame(game)
-            Log.d(TAG, "Successfully deleted game: ${game.name} from DB.")
-        } catch (e: Exception) {
-            Log.e(TAG, "Error deleting game from DB", e)
-        }
-    }
+    // Sincronizar datos entre API y base de datos
+    suspend fun syncGames(apiKey: String, steamId: String) {
+        val apiGames = fetchAllGamesFromApi(apiKey, steamId)
+        val dbGames = fetchAllGamesFromDB()
 
+        // Convierte los juegos de la API en entidades para la base de datos
+        val gamesToSave = apiGames.map { apiGame ->
+            GameEntity(
+                id = apiGame.appId.toLong(),
+                name = apiGame.name.orEmpty(),
+                playtime = apiGame.playtimeForever,
+                iconUrl = apiGame.getImageUrl()
+            )
+        }
+
+        // Actualiza la base de datos
+        saveGamesToDB(gamesToSave)
+
+        Log.d(TAG, "Sync complete: API games ${apiGames.size}, DB games ${dbGames.size}")
+    }
 }
-
