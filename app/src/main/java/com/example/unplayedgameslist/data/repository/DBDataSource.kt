@@ -3,31 +3,33 @@ package com.example.unplayedgameslist.data.repository
 import com.example.unplayedgameslist.data.db.GameDao
 import com.example.unplayedgameslist.data.db.GameEntity
 
-class DBDataSource(
-    private val gameDao: GameDao
-) {
-    /**
-     * Esta clase define las operaciones de la base de datos.
-     * Es una clase que implementa el repositorio.
-     */
+class DBDataSource(private val gameDao: GameDao) {
 
-    // Obtener todos los juegos de la base de datos
     suspend fun getAllGames(): List<GameEntity> {
         return gameDao.getAllGames()
     }
 
-    // Obtener un juego por su ID de Steam
-    suspend fun getGameBySteamId(steamId: Long): GameEntity? {
-        return gameDao.getGameById(steamId)
+    suspend fun getGameById(id: Long): GameEntity? {
+        return gameDao.getGameById(id)
     }
 
-    // Insertar un juego en la base de datos
     suspend fun insertGame(game: GameEntity) {
         gameDao.insertGame(game)
     }
 
-    // Actualizar un juego en la base de datos
+    suspend fun insertAll(games: List<GameEntity>) {
+        games.forEach { gameDao.insertGame(it) }
+    }
+
     suspend fun updateGame(game: GameEntity) {
         gameDao.update(game)
+    }
+
+    suspend fun deleteGame(game: GameEntity) {
+        gameDao.delete(game)
+    }
+
+    suspend fun clearDatabase() {
+        gameDao.deleteAllGames()
     }
 }
