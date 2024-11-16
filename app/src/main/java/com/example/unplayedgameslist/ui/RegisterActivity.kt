@@ -1,22 +1,16 @@
 package com.example.unplayedgameslist.ui
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.example.unplayedgameslist.App
 import com.example.unplayedgameslist.R
-import com.example.unplayedgameslist.databinding.ActivityMainBinding
 import com.example.unplayedgameslist.databinding.ActivityRegisterBinding
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var binding : ActivityRegisterBinding
-    private lateinit var prefs : PrefernecesManager
+    private lateinit var prefs : PreferencesManager
 
     // Constantes globales
     companion object {

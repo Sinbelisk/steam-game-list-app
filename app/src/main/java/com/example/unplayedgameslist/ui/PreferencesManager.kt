@@ -6,7 +6,7 @@ import android.util.Log
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 
-class PrefernecesManager(context: Context) {
+class PreferencesManager(context: Context) {
 
     // Genera una clave maestra segura para cifrar y descifrar datos.
     // Utiliza el esquema AES256-GCM, uno de los más seguros disponibles.

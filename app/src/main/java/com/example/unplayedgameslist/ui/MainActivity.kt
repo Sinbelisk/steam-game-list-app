@@ -9,11 +9,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.unplayedgameslist.App
 import com.example.unplayedgameslist.R
 import com.example.unplayedgameslist.databinding.ActivityMainBinding
-import java.util.Objects
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding : ActivityMainBinding
-    private val prefs : PrefernecesManager = App.prefsManager
+    private val prefs : PreferencesManager = App.prefsManager
 
     companion object{
         private const val SUCCESS_LOGIN = "Inicio de sesión exitoso"
