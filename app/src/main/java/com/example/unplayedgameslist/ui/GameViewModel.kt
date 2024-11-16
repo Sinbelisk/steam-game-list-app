@@ -13,25 +13,27 @@ import kotlinx.coroutines.launch
 
 class GameViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val gameRepository: GameRepository = App.gameRepository  // Accede al repositorio de la aplicación
-    val gamesLiveData: MutableLiveData<List<GameEntity>> = MutableLiveData()  // Lista de juegos que la vista observará
+    private val gameRepository: GameRepository = App.gameRepository
+    val gamesLiveData: MutableLiveData<List<GameEntity>> = MutableLiveData()
 
     // Método para cargar todos los juegos desde la API
     fun loadGames(apiKey: String, steamId: String) {
         viewModelScope.launch {
             try {
-                // Obtiene los juegos desde la API
                 val gamesFromApi = gameRepository.fetchAllGamesFromApi(apiKey, steamId)
                 if (gamesFromApi.isNotEmpty()) {
-                    // Convierte los juegos de la API a GameEntity y los pasa a la UI
                     val gameEntities = gamesFromApi.map {
-                        it.toEntity(status = "default")  // Usa el mapeo para convertir a GameEntity
+                        it.toEntity(status = "default")
                     }
                     gamesLiveData.postValue(gameEntities)
+                    Log.d("GameViewModel", "Games loaded: ${gameEntities.size}")
+                } else {
+                    Log.d("GameViewModel", "No games found.")
                 }
             } catch (e: Exception) {
                 Log.e("GameViewModel", "Error al cargar los juegos desde la API", e)
             }
         }
     }
+
 }

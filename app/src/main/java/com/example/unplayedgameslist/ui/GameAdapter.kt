@@ -6,11 +6,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.unplayedgameslist.R
 import com.example.unplayedgameslist.data.db.GameEntity
-import com.squareup.picasso.Picasso
 
-class GameAdapter(private val games: List<GameEntity>) : RecyclerView.Adapter<GameAdapter.GameViewHolder>() {
+class GameAdapter(private var games: List<GameEntity>) : RecyclerView.Adapter<GameAdapter.GameViewHolder>() {
 
     // ViewHolder para enlazar cada ítem con su vista
     inner class GameViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -18,11 +18,20 @@ class GameAdapter(private val games: List<GameEntity>) : RecyclerView.Adapter<Ga
         private val gameGenre: TextView = itemView.findViewById(R.id.gameGenre)
         private val gameImage: ImageView = itemView.findViewById(R.id.gameImage)
 
-        // "Bindear" el juego a la interfaz
+        // "Bindear" a la lista los elementos
         fun bind(game: GameEntity) {
             gameName.text = game.name
-            gameGenre.text = game.genre ?: "N/A"  // En caso de que el género sea nulo
-            Picasso.get().load(game.imageUrl).into(gameImage)  // Cargar la imagen desde la URL
+            gameGenre.text = game.genre ?: "N/A" // Handle null genre
+            loadImage(game.imageUrl)
+        }
+
+        // Glidle para cargra imagenes, picasso no funciona.
+        private fun loadImage(imageUrl: String?) {
+            Glide.with(itemView.context)
+                .load(imageUrl)
+                .placeholder(R.drawable.placeholder_image)  // Optional: Add placeholder
+                .error(R.drawable.error_image)  // Optional: Add error image
+                .into(gameImage)
         }
     }
 
@@ -37,4 +46,10 @@ class GameAdapter(private val games: List<GameEntity>) : RecyclerView.Adapter<Ga
     }
 
     override fun getItemCount(): Int = games.size  // Devuelve el tamaño de la lista de juegos
+
+    // Método para actualizar los datos del adaptador
+    fun updateGames(newGames: List<GameEntity>) {
+        games = newGames
+        notifyDataSetChanged()  // Refreshes the adapter to show the updated list
+    }
 }

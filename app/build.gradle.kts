@@ -6,13 +6,6 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
-val localProperties = rootProject.file("local.properties")
-val properties = Properties()
-properties.load(localProperties.inputStream())
-
-val apiKey: String = properties.getProperty("steamApiKey")
-    ?: throw GradleException("Clave steamApiKey no encontrada en local.properties")
-
 
 android {
     namespace = "com.example.unplayedgameslist"
@@ -31,9 +24,6 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        // Inyectar la clave de API en BuildConfig
-        buildConfigField("String", "API_KEY", "\"$apiKey\"")
     }
 
     buildTypes {
@@ -83,6 +73,10 @@ dependencies {
 
     // libreria para encriptar datos
     implementation(libs.androidx.security.crypto)
+
+    //implementacion de glide
+    implementation(libs.glide)
+    ksp(libs.compiler)
 
     // Test dependencies
     testImplementation(libs.junit)

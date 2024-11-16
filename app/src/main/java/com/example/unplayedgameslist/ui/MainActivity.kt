@@ -49,25 +49,26 @@ class MainActivity : AppCompatActivity() {
         val savedSteamId = prefs.getSteamID()
         val savedPassword = prefs.getPassword()
 
-        // Verificar si los valores recuperados son nulos o vacíos
-        if (savedSteamId.isNullOrEmpty() || savedPassword.isNullOrEmpty()) {
-            Toast.makeText(this, "Error, datos no encontrados", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        // Comparar los datos ingresados con los almacenados
-        if (etSteamId.text.toString() != savedSteamId) {
-            Toast.makeText(this, "Error, usuario no encontrado", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        if (etPassword.text.toString() != savedPassword) {
-            Toast.makeText(this, "Error, contraseña incorrecta", Toast.LENGTH_SHORT).show()
-            return
-        }
+//        // Verificar si los valores recuperados son nulos o vacíos
+//        if (savedSteamId.isNullOrEmpty() || savedPassword.isNullOrEmpty()) {
+//            Toast.makeText(this, "Error, datos no encontrados", Toast.LENGTH_SHORT).show()
+//            return
+//        }
+//
+//        // Comparar los datos ingresados con los almacenados
+//        if (etSteamId.text.toString() != savedSteamId) {
+//            Toast.makeText(this, "Error, usuario no encontrado", Toast.LENGTH_SHORT).show()
+//            return
+//        }
+//
+//        if (etPassword.text.toString() != savedPassword) {
+//            Toast.makeText(this, "Error, contraseña incorrecta", Toast.LENGTH_SHORT).show()
+//            return
+//        }
 
         Toast.makeText(this, SUCCESS_LOGIN, Toast.LENGTH_SHORT).show()
         changeActivity(SteamGamesActivity::class.java)
+        finish()
     }
 
 

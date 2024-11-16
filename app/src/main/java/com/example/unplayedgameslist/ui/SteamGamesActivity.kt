@@ -1,6 +1,7 @@
 package com.example.unplayedgameslist.ui
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -13,30 +14,15 @@ import com.example.unplayedgameslist.App
 import com.example.unplayedgameslist.R
 
 class SteamGamesActivity : AppCompatActivity() {
-
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var gameAdapter: GameAdapter
-    private lateinit var gameViewModel: GameViewModel
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_steam_games)
 
-        recyclerView = findViewById(R.id.recyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-
-        // Configurar el ViewModel
-        gameViewModel = ViewModelProvider(this).get(GameViewModel::class.java)
-
-        // Observar los juegos
-        gameViewModel.gamesLiveData.observe(this, Observer { games ->
-            // Aquí actualizas el adaptador con los juegos obtenidos
-            gameAdapter = GameAdapter(games)
-            recyclerView.adapter = gameAdapter
-        })
-
-        val prefs = App.prefsManager
-        gameViewModel.loadGames(prefs.getSteamAPI()!!, prefs.getSteamID()!!)
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, SteamGamesFragment())  // 'fragment_container' es el contenedor del fragmento
+                .commit()
+        }
     }
 }
