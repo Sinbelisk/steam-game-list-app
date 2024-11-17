@@ -28,6 +28,7 @@ class PreferencesManager(context: Context) {
         private const val KEY_STEAM_ID = "SteamID"
         private const val KEY_PASSWORD = "Password"
         private const val KEY_STEAM_API = "SteamAPI"
+        private const val USER_LOGGED = false
     }
 
     // Método para guardar los datos encriptados
@@ -40,6 +41,14 @@ class PreferencesManager(context: Context) {
             Log.d("PrefsManager", "Datos guardados: SteamID=$steamID, Password=$password, SteamAPI=$steamAPI")
         }
     }
+
+    fun setUserLoginStatus(status : Boolean){
+        prefs.edit().apply {
+            putBoolean(USER_LOGGED.toString(), status)
+            apply()
+        }
+    }
+
 
     // Obtiene el SteamID descifrado desde las preferencias compartidas.
     fun getSteamID(): String? {
@@ -54,6 +63,11 @@ class PreferencesManager(context: Context) {
     // Obtiene la SteamAPI descifrada desde las preferencias compartidas.
     fun getSteamAPI(): String? {
         return prefs.getString(KEY_STEAM_API, null)
+    }
+
+    //Obtiene el estado de inicio de sesion del usuario
+    fun getUserLoginStatus() : Boolean{
+        return prefs.getBoolean(KEY_PASSWORD, false)
     }
 }
 
