@@ -21,9 +21,10 @@ object GameDetailMapper {
             shortDescription = details.shortDescription, // Map the short description of the game
             developers = details.developers?.joinToString(", "), // Join developers into a single string
             publishers = details.publishers?.joinToString(", "), // Join publishers into a single string
-            genres = details.genres?.joinToString(", ") ?: "", // Join genres into a single string, default to empty if null
+            genres = details.genres?.joinToString(", ") { it.description ?: "" } ?: "", // Join genre descriptions into a single string
             header = details.header, // Map the header (image or promotional material)
             releaseDate = details.releaseDate?.date // Map the release date if available
         )
     }
+
 }

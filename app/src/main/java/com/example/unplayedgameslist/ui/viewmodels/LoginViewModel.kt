@@ -34,7 +34,7 @@ class LoginViewModel : ViewModel() {
         Log.d("prueba de credenciales", "$savedPass , $savedUser")  // Log the credentials for debugging
 
         // Example logic for verifying credentials
-        if (steamId == savedUser && password == savedPass) {
+        if (steamId.trim() == savedUser?.trim() && password == savedPass) {
             _loginStatus.value = true  // Set login status to true
             prefs.setUserLoginStatus(true)  // Save login status
         } else {

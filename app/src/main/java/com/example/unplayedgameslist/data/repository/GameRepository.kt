@@ -30,7 +30,7 @@ class GameRepository(
 
     /**
      * Synchronizes data by fetching owned games from the API and storing them in the database.
-     * Additionally, it fetches and inserts game details for each owned game.
+     * Additionally, it fetches and inserts game details for each owned game in batches to respect API rate limits.
      *
      * @param apiKey The Steam API key used for authentication.
      * @param steamId64 The user's SteamID64 used to fetch their owned games.
@@ -45,44 +45,64 @@ class GameRepository(
                 val gameEntities = it.map { game -> GameEntityMapper.toEntity(game) }
                 gameDao.insertGames(gameEntities)
 
-                // Fetch and insert game details for each owned game with retries
-                it.forEach { ownedGame ->
-                    fetchAndInsertGameDetails(ownedGame.appId)
-                }
+                // Fetch and insert game details for each owned game in batches with retries
+                val appIds = it.map { ownedGame -> ownedGame.appId }
+                fetchAndInsertGameDetailsInGroups(appIds)
+
             } ?: Log.w(TAG, "No games found for user.")
         } catch (e: Exception) {
             Log.e(TAG, "Error synchronizing data", e)
         }
     }
 
+
     /**
-     * Fetches details for a specific game and inserts the data into the database.
-     * This method uses an exponential backoff strategy in case of failure and retries up to 5 times.
+     * Fetches game details from the Steam API in batches, ensuring that the rate limits are respected.
+     * The method will retry up to 5 times in case of failure, with exponential backoff for each attempt.
      *
-     * @param appId The unique app ID of the game to fetch details for.
+     * @param appIds The list of unique app IDs for which to fetch game details.
+     * @param groupSize The number of app IDs to request in a single batch. Default is 5.
      */
-    private suspend fun fetchAndInsertGameDetails(appId: Int) {
+    private suspend fun fetchAndInsertGameDetailsInGroups(appIds: List<Int>, groupSize: Int = 5) {
         var attempt = 0
         var success = false
+        val totalAppIds = appIds.size
+        val totalGroups = (totalAppIds + groupSize - 1) / groupSize  // Total number of groups
+
         while (!success && attempt < 5) {
             try {
-                val gameDetailsResponse = apiDataSource.fetchGameDetails(appId)
-                gameDetailsResponse?.body()?.values?.firstOrNull()?.data?.let { data ->
-                    val gameDetailEntity = GameDetailMapper.toEntity(data)
-                    gameDao.insertGameDetails(listOf(gameDetailEntity))
-                    success = true
+                // Process the appIds in batches of groupSize
+                for (groupIndex in 0 until totalGroups) {
+                    val start = groupIndex * groupSize
+                    val end = minOf((groupIndex + 1) * groupSize, totalAppIds)
+                    val group = appIds.subList(start, end)
+
+                    // Perform the API calls for each group sequentially, to respect rate limits
+                    for (appId in group) {
+                        val gameDetailsResponse = apiDataSource.fetchGameDetails(appId)
+                        gameDetailsResponse?.body()?.values?.firstOrNull()?.data?.let { data ->
+                            val gameDetailEntity = GameDetailMapper.toEntity(data)
+                            gameDao.insertGameDetails(listOf(gameDetailEntity))
+                        }
+                    }
+
+                    // Add a delay between groups to avoid hitting the API rate limit
+                    delay(1000) // Adjust this value based on Steam's API request limits
                 }
+
+                success = true
             } catch (e: Exception) {
                 attempt++
                 if (attempt < 5) {
                     val delayTime = (2.0.pow(attempt.toDouble()) * 1000).toLong() // Exponential backoff
                     delay(delayTime)
                 } else {
-                    Log.e("fetchAndInsertGameDetails", "Failed after 5 attempts", e)
+                    Log.e("fetchAndInsertGameDetailsInGroups", "Failed after 5 attempts", e)
                 }
             }
         }
     }
+
 
     /**
      * Resolves a SteamID64 from a Vanity URL (custom Steam username).

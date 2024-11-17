@@ -79,6 +79,7 @@ class GameDetailDialogFragment(private val gameEntity: GameEntity) : DialogFragm
         // Developers and publishers
         binding.gameDevelopers.text = getString(R.string.developers, details.developers)
         binding.gamePublishers.text = getString(R.string.publishers, details.publishers)
+        binding.gameGenre.text = getString(R.string.genres, details.genres)
 
         // Short description of the game
         binding.gameDescription.text = details.shortDescription
