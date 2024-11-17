@@ -14,6 +14,7 @@ import android.widget.CheckBox
 import android.widget.Spinner
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import com.example.unplayedgameslist.databinding.FragmentSettingsDialogBinding
 import com.example.unplayedgameslist.ui.SortType
 import com.example.unplayedgameslist.ui.viewmodels.SettingsDialogViewModel
@@ -25,7 +26,8 @@ class SettingsDialogFragment : DialogFragment() {
     private lateinit var saveButton: Button
     private lateinit var cancelButton: Button
 
-    private val settingsViewModel: SettingsDialogViewModel by viewModels()
+    // Cambia el acceso al ViewModel a través de la actividad
+    private lateinit var settingsViewModel: SettingsDialogViewModel
 
     companion object {
         fun newInstance() = SettingsDialogFragment()
@@ -36,6 +38,9 @@ class SettingsDialogFragment : DialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         val binding = FragmentSettingsDialogBinding.inflate(inflater, container, false)
+
+        // Inicializamos el SettingsDialogViewModel para ser compartido entre fragmentos
+        settingsViewModel = ViewModelProvider(requireActivity()).get(SettingsDialogViewModel::class.java)
 
         // Inicialización de los elementos de la vista
         sortSpinner = binding.sortSpinner
@@ -65,7 +70,6 @@ class SettingsDialogFragment : DialogFragment() {
 
     private fun observeViewModel() {
         settingsViewModel.sortOption.observe(viewLifecycleOwner) { selectedOption ->
-            // Asegúrate de que selectedOption sea un Enum
             val position = SortType.values().indexOf(selectedOption)
             sortSpinner.setSelection(position)
         }

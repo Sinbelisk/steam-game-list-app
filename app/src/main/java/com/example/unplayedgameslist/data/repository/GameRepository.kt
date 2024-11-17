@@ -3,10 +3,12 @@ package com.example.unplayedgameslist.data.repository
 import com.example.unplayedgameslist.data.db.GameEntity
 
 import android.util.Log
+import androidx.annotation.IntegerRes
 import com.example.unplayedgameslist.data.api.mappers.GameDetailMapper
 import com.example.unplayedgameslist.data.api.mappers.GameEntityMapper
 import com.example.unplayedgameslist.data.db.GameDao
 import com.example.unplayedgameslist.data.db.UserAddedGameEntity
+import com.example.unplayedgameslist.ui.SortType
 
 class GameRepository(
     private val apiDataSource: ApiDataSource,
@@ -15,6 +17,10 @@ class GameRepository(
     companion object {
         private const val TAG = "GameRepository"
     }
+
+    // Getter para gameDao
+    val gameDaoInstance: GameDao
+        get() = gameDao
 
     suspend fun synchronizeData(apiKey: String, steamId64: Long) {
         try {
@@ -45,26 +51,6 @@ class GameRepository(
     }
 
 
-    // Obtener los juegos con 0 horas jugadas
-    suspend fun getGamesWithZeroPlaytime(): List<GameEntity> {
-        return gameDao.getGamesWithZeroPlaytime()
-    }
-
-    // Obtener los juegos más jugados
-    suspend fun getMostPlayedGames(): List<GameEntity> {
-        return gameDao.getMostPlayedGames()
-    }
-
-    // Obtener los juegos menos jugados
-    suspend fun getLeastPlayedGames(): List<GameEntity> {
-        return gameDao.getLeastPlayedGames()
-    }
-
-    // Insertar un juego manualmente añadido por el usuario
-    suspend fun addUserGame(game: UserAddedGameEntity) {
-        gameDao.insertUserAddedGame(game)
-    }
-
     suspend fun getSteamID64(apiKey: String, vanityUrl: String): Long? {
         return try {
             Log.d(TAG, "Resolving SteamID64 for Vanity URL: $vanityUrl")
@@ -80,5 +66,14 @@ class GameRepository(
             Log.e(TAG, "Error resolving SteamID64 for Vanity URL: $vanityUrl", e)
             null
         }
+    }
+
+    suspend fun getGames(hidePlayed: Boolean, sortType: SortType): List<GameEntity> {
+        val hide = if (hidePlayed) 1 else 0
+        val order = when (sortType) {
+            SortType.ASC -> "asc"
+            SortType.DESC -> "desc"
+        }
+        return gameDao.getGames(hide, order)
     }
 }

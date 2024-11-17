@@ -17,18 +17,18 @@ class SettingsDialogViewModel : ViewModel() {
 
     init {
         // Cargar configuraciones predeterminadas
-        _sortOption.value = SortType.DESC
-        _excludePlayed.value = false
+        _sortOption.value = App.prefsManager.getSortType()
+        _excludePlayed.value = App.prefsManager.getHidePlayed()
     }
 
     fun setSortOption(option: SortType) {
         _sortOption.value = option
-        saveSettings()  // Guarda las configuraciones cuando cambian
+        saveSettings()
     }
 
     fun setExcludePlayed(exclude: Boolean) {
         _excludePlayed.value = exclude
-        saveSettings()  // Guarda las configuraciones cuando cambian
+        saveSettings()
     }
 
     fun saveSettings() {
@@ -37,9 +37,8 @@ class SettingsDialogViewModel : ViewModel() {
         val currentSortOption = sortOption.value ?: SortType.DESC
         val currentExcludePlayed = excludePlayed.value ?: false
 
-        // Guarda las configuraciones usando el PreferencesManager
+        // Guarda las configuraciones usando PreferencesManager
         prefs.saveConfig(currentSortOption, currentExcludePlayed)
-
         Log.d("SettingsDialogViewModel", "Configuraciones guardadas")
     }
 
@@ -47,5 +46,9 @@ class SettingsDialogViewModel : ViewModel() {
         // Restablece las configuraciones a sus valores predeterminados
         _sortOption.value = SortType.DESC
         _excludePlayed.value = false
+
+        // Aseguramos que se notifiquen los observadores de los cambios
+        saveSettings()  // Guarda los valores predeterminados
     }
 }
+

@@ -14,7 +14,6 @@ class LoginViewModel : ViewModel() {
     val loginStatus: LiveData<Boolean> get() = _loginStatus
 
     private val prefs = App.prefsManager
-    private val repository : GameRepository = App.gameRepository
 
     fun login(steamId: String, password: String) {
         val savedUser = prefs.getSteamID()
@@ -29,7 +28,6 @@ class LoginViewModel : ViewModel() {
 
         } else {
             _loginStatus.value = false
-            // esto puede causar problemas.
             prefs.setUserLoginStatus(false)
         }
     }

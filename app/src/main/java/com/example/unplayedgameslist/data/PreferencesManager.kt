@@ -33,7 +33,7 @@ class PreferencesManager(context: Context) {
         private const val STEAM_ID_64  = "steamID64"
 
         private const val SORT_TYPE = "sortType"
-        private const val HIDE_PLAYED = "hidePlayed";
+        private const val HIDE_PLAYED = "hidePlayed"
     }
 
     // Método para guardar los datos encriptados
@@ -102,8 +102,8 @@ class PreferencesManager(context: Context) {
         }
     }
 
-    fun getHidePlayed() : Boolean{
-        return prefs.getBoolean(HIDE_PLAYED, false)
+    fun getHidePlayed() : Boolean {
+        return (prefs.getBoolean(HIDE_PLAYED, false))
     }
 }
 

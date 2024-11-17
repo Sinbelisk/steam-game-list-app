@@ -24,23 +24,27 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         loginViewModel = ViewModelProvider(this)[LoginViewModel::class.java]
 
         setupActions()
+
+        // SI ya hay un usuario definido, inicia sesion directamente.
+        if(loginViewModel.tryAutoLogin()){
+            changeActivity()
+        }
     }
+
 
     private fun setupActions() {
         binding.btnLogin.setOnClickListener {
-            // Si no hay credenciales guardadas, necesita iniciar sesion
-            if(!loginViewModel.tryAutoLogin()){
                 val steamId = binding.etSteamID.text.toString()
                 val password = binding.etPassword.text.toString()
+
                 loginViewModel.login(steamId, password)
-            }
         }
 
         // Observar el estado del login
         loginViewModel.loginStatus.observe(viewLifecycleOwner) { isSuccess ->
             if (isSuccess) {
                 Toast.makeText(requireContext(), "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show()
-                (activity as MainActivity).changeFragment(SteamGamesFragment())
+
             } else {
                 Toast.makeText(requireContext(), "Credenciales incorrectas", Toast.LENGTH_SHORT).show()
             }
@@ -49,5 +53,9 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         binding.btnRegister.setOnClickListener {
             (activity as MainActivity).changeFragment(RegisterFragment())
         }
+    }
+
+    private fun changeActivity(){
+        (activity as MainActivity).changeFragment(SteamGamesFragment())
     }
 }

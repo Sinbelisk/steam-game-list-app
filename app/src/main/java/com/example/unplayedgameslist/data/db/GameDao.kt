@@ -22,17 +22,20 @@ interface GameDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertUserAddedGame(game: UserAddedGameEntity)
 
-    // Obtener todos los juegos con 0 horas jugadas
-    @Query("SELECT * FROM games WHERE playtime = 0 ORDER BY playtime DESC")
-    suspend fun getGamesWithZeroPlaytime(): List<GameEntity>
+    @Query(
+        """
+    SELECT * FROM games 
+    WHERE (:filterZeroPlaytime = 1 AND playtime = 0) OR :filterZeroPlaytime = 0
+    ORDER BY 
+        CASE WHEN :orderByPlaytime = 'asc' THEN playtime END ASC, 
+        CASE WHEN :orderByPlaytime = 'desc' THEN playtime END DESC
+    """
+    )
+    suspend fun getGames(
+        filterZeroPlaytime: Int = 0,  // 1 para filtrar solo con 0 horas jugadas, 0 para ignorar el filtro
+        orderByPlaytime: String = "desc"  // "asc" o "desc" para ordenar
+    ): List<GameEntity>
 
-    // Obtener los juegos filtrados por horas jugadas (más jugadas)
-    @Query("SELECT * FROM games ORDER BY playtime DESC")
-    suspend fun getMostPlayedGames(): List<GameEntity>
-
-    // Obtener los juegos filtrados por horas jugadas (menos jugadas)
-    @Query("SELECT * FROM games ORDER BY playtime ASC")
-    suspend fun getLeastPlayedGames(): List<GameEntity>
 
     // Obtener los detalles de un juego por su ID
     @Query("SELECT * FROM game_details WHERE appId = :appId")

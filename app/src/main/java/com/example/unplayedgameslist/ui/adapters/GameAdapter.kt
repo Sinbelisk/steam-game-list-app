@@ -2,6 +2,7 @@ package com.example.unplayedgameslist.ui.adapters
 
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,7 +45,8 @@ class GameAdapter(private var games: List<GameEntity>, private val context: Cont
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GameViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.game_list_item, parent, false)
+        val itemView =
+            LayoutInflater.from(parent.context).inflate(R.layout.game_list_item, parent, false)
         return GameViewHolder(itemView)
     }
 
@@ -56,8 +58,8 @@ class GameAdapter(private var games: List<GameEntity>, private val context: Cont
     override fun getItemCount(): Int = games.size
 
     fun updateGames(newGames: List<GameEntity>) {
-        games = newGames
-        notifyDataSetChanged()  // Notifica para refrescar la vista
+        games = newGames.toList()
+        notifyDataSetChanged()
     }
 }
 
