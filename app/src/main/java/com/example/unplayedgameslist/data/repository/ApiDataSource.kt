@@ -9,9 +9,9 @@ import retrofit2.Response
 class ApiDataSource(private val apiService: SteamApiService) {
 
     // Obtiene los juegos de un usuario desde la API
-    suspend fun fetchOwnedGames(apiKey: String, steamId: String): List<OwnedGameData>? {
+    suspend fun fetchOwnedGames(apiKey: String, steamId64: Long): List<OwnedGameData>? {
         return safeApiCall(
-            apiCall = { apiService.getOwnedGames(apiKey, steamId) },
+            apiCall = { apiService.getOwnedGames(apiKey, steamId64) },
             onSuccess = { it.body()?.response?.games ?: emptyList() }
         )
     }
@@ -21,6 +21,21 @@ class ApiDataSource(private val apiService: SteamApiService) {
         return safeApiCall(
             apiCall = { apiService.getGameDetails(appId) },
             onSuccess = { it }
+        )
+    }
+
+    // Obtiene el identificador numérico (SteamID64) a partir del Vanity URL (CustomID)
+    suspend fun getSteamID64(apiKey: String, vanityUrl: String): Long? {
+        return safeApiCall(
+            apiCall = { apiService.resolveVanityURL(apiKey, vanityUrl) },
+            onSuccess = { response ->
+                val resolveResponse = response.body()?.response
+                if (resolveResponse?.success == 1) {
+                    resolveResponse.steamid
+                } else {
+                    null // Retorna null si no fue posible resolver el Vanity URL
+                }
+            }
         )
     }
 

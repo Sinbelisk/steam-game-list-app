@@ -26,7 +26,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                 Toast.makeText(requireContext(), "Registración exitosa", Toast.LENGTH_SHORT).show()
                 (activity as MainActivity).changeFragment(LoginFragment())  // Cambia a LoginFragment
             } else {
-                Toast.makeText(requireContext(), "Error en la registración", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Error en la registración, comprueba que la SteamID y la clave APi sean validas", Toast.LENGTH_SHORT).show()
             }
         }
 

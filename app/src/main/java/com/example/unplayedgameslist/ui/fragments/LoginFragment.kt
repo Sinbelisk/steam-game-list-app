@@ -14,7 +14,6 @@ import com.example.unplayedgameslist.ui.viewmodels.LoginViewModel
 
 class LoginFragment : Fragment(R.layout.fragment_login) {
     private lateinit var binding: FragmentLoginBinding
-    private val prefs: PreferencesManager = App.prefsManager
     private lateinit var loginViewModel: LoginViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -25,6 +24,17 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         loginViewModel = ViewModelProvider(this)[LoginViewModel::class.java]
 
         setupActions()
+    }
+
+    private fun setupActions() {
+        binding.btnLogin.setOnClickListener {
+            // Si no hay credenciales guardadas, necesita iniciar sesion
+            if(!loginViewModel.tryAutoLogin()){
+                val steamId = binding.etSteamID.text.toString()
+                val password = binding.etPassword.text.toString()
+                loginViewModel.login(steamId, password)
+            }
+        }
 
         // Observar el estado del login
         loginViewModel.loginStatus.observe(viewLifecycleOwner) { isSuccess ->
@@ -34,14 +44,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             } else {
                 Toast.makeText(requireContext(), "Credenciales incorrectas", Toast.LENGTH_SHORT).show()
             }
-        }
-    }
-
-    private fun setupActions() {
-        binding.btnLogin.setOnClickListener {
-            val steamId = binding.etSteamID.text.toString()
-            val password = binding.etPassword.text.toString()
-            loginViewModel.login(steamId, password)  // La acción de logeo la realiza el viewmodel.
         }
 
         binding.btnRegister.setOnClickListener {

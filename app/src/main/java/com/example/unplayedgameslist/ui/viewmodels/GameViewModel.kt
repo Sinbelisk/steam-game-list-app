@@ -18,9 +18,9 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
 
     fun loadGames() {
         val steamAPI = App.prefsManager.getSteamAPI()
-        val steamID = App.prefsManager.getSteamID()
+        val steamID64 = App.prefsManager.getSteamID64()
 
-        if (steamAPI == null || steamID == null) {
+        if (steamAPI == null || steamID64 == null) {
             Log.e("GameViewModel", "SteamAPI o SteamID no encontrados.")
             return
         }
@@ -28,7 +28,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             try {
                 // Asegúrate de no pasar null para steamID
-                val games = gameRepository.fetchAllGamesFromApi(steamAPI, steamID)
+                val games = gameRepository.fetchAllGamesFromApi(steamAPI, steamID64)
                 gamesLiveData.postValue(games.map { it.toEntity(status = "default") })
             } catch (e: Exception) {
                 Log.e("GameViewModel", "Error al cargar los juegos desde la API", e)

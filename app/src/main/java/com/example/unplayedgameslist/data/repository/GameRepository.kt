@@ -15,10 +15,10 @@ class GameRepository(
     }
 
     // Obtener todos los juegos desde la API
-    suspend fun fetchAllGamesFromApi(apiKey: String, steamId: String): List<OwnedGameData> {
+    suspend fun fetchAllGamesFromApi(apiKey: String, steamId64: Long): List<OwnedGameData> {
         return try {
             Log.d(TAG, "Fetching all games from API...")
-            val games = apiDataSource.fetchOwnedGames(apiKey, steamId) ?: emptyList()
+            val games = apiDataSource.fetchOwnedGames(apiKey, steamId64) ?: emptyList()
             Log.d(TAG, "Successfully fetched ${games.size} games from API.")
             games
         } catch (e: Exception) {
@@ -60,6 +60,23 @@ class GameRepository(
             Log.d(TAG, "Successfully saved games to DB.")
         } catch (e: Exception) {
             Log.e(TAG, "Error saving games to DB", e)
+        }
+    }
+
+    suspend fun getSteamID64(apiKey: String, vanityUrl: String): Long? {
+        return try {
+            Log.d(TAG, "Resolving SteamID64 for Vanity URL: $vanityUrl")
+            val steamId = apiDataSource.getSteamID64(apiKey, vanityUrl)
+            if (steamId != null) {
+                Log.d(TAG, "Successfully resolved SteamID64: $steamId")
+            } else {
+                Log.e(TAG, "Failed to resolve SteamID64 for Vanity URL: $vanityUrl")
+            }
+            steamId
+
+        } catch (e: Exception) {
+            Log.e(TAG, "Error resolving SteamID64 for Vanity URL: $vanityUrl", e)
+            null
         }
     }
 }
