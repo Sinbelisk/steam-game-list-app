@@ -6,11 +6,18 @@
     <string name="playedHours">Horas jugadas: %d</string>
     <string name="gameName">%s</string>
     <string name="game_image">image\n</string>
-    <string name="developers" />
-    <string name="publishers" />
+    <string name="developers" >Desarrollador/es: %s</string>
+    <string name="publishers" >Editor/es: %s</string>
+    <string name="genres">Genero/s: %s</string>
+    <string name="pdate">Fecha: %s</string>
 
     <string name="unknown_release_date">Fecha de lanzamiento desconocida</string>
     <string name="unknown_genre">Género no disponible</string>
     <string name="unknown_developers">Desarrolladores desconocidos</string>
     <string name="unknown_publishers">Publicadores desconocidos</string>
+    <string name="hint_description">Descripcion</string>
+    <string name="hint_release_date">Fecha salida</string>
+    <string name="hint_game_name">Nombre juego</string>
+    <string name="hint_developers">Desarrollador\n</string>
+    <string name="hint_publishers">editor</string>
 </resources>

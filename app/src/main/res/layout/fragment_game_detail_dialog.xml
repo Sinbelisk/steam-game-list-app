@@ -4,13 +4,14 @@
     android:layout_height="wrap_content"
     android:background="#171A21"
     android:padding="16dp"
-    tools:context=".ui.fragments.GameDetailDialogFragment"> <!-- Fondo oscuro para la ventana emergente -->
+    tools:context=".ui.fragments.GameDetailDialogFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:gravity="center_horizontal">
 
         <!-- Imagen del juego -->
         <ImageView
@@ -31,17 +32,20 @@
             android:textAlignment="center"
             android:textColor="#FFFFFF"
             android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:hint="@string/hint_game_name" /> <!-- Placeholder -->
 
         <!-- Fecha de lanzamiento -->
         <TextView
             android:id="@+id/gameReleaseDate"
+            android:text="@string/pdate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:textAlignment="center"
             android:textColor="#A9A9A9"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:hint="@string/hint_release_date" /> <!-- Placeholder -->
 
         <!-- Descripción -->
         <TextView
@@ -51,17 +55,20 @@
             android:layout_marginBottom="16dp"
             android:lineSpacingExtra="4dp"
             android:textColor="#FFFFFF"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:hint="@string/hint_description" /> <!-- Placeholder -->
 
         <!-- Género -->
         <TextView
             android:id="@+id/gameGenre"
+            android:text="@string/genres"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:textColor="#A9A9A9"
             android:textSize="14sp"
-            android:textStyle="italic" />
+            android:textStyle="italic"
+            android:hint="@string/hint_genre" /> <!-- Placeholder -->
 
         <!-- Sección de desarrolladores -->
         <TextView
@@ -71,17 +78,20 @@
             android:layout_marginBottom="8dp"
             android:textColor="#FFFFFF"
             android:textSize="14sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:hint="@string/hint_developers" /> <!-- Placeholder -->
 
         <!-- Sección de publicadores -->
         <TextView
             android:id="@+id/gamePublishers"
+            android:text="@string/publishers"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:textColor="#FFFFFF"
             android:textSize="14sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:hint="@string/hint_publishers" /> <!-- Placeholder -->
 
         <!-- Botón para cerrar -->
         <Button

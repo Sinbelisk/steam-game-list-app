@@ -3,7 +3,6 @@ package com.example.unplayedgameslist.data.api.mappers
 import com.example.unplayedgameslist.data.api.data.GameDetailData
 import com.example.unplayedgameslist.data.api.responses.GameDetailResponse
 import com.example.unplayedgameslist.data.db.GameDetailEntity
-
 object GameDetailMapper {
     fun toEntity(details: GameDetailData): GameDetailEntity {
         return GameDetailEntity(
@@ -12,8 +11,9 @@ object GameDetailMapper {
             shortDescription = details.shortDescription,
             developers = details.developers?.joinToString(", "),
             publishers = details.publishers?.joinToString(", "),
-            genres = details.genres?.joinToString(", ") ?: "",
-            header = details.header
+            genres = details.genres?.joinToString(", ") ?: "",  // Ensure a non-null value for genres
+            header = details.header,
+            releaseDate = details.releaseDate?.date // Map the release date if available
         )
     }
 }

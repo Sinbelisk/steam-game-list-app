@@ -44,11 +44,5 @@ interface GameDao {
     @Query("DELETE FROM game_details")
     suspend fun deleteAllGameDetails()
 
-    // Función para insertar juegos y detalles de manera transaccional
-    @Transaction
-    suspend fun insertGamesAndDetails(games: List<GameEntity>, details: List<GameDetailEntity>) {
-        insertGames(games)
-        insertGameDetails(details)
-    }
 }
 

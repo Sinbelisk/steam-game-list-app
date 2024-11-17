@@ -9,6 +9,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import kotlin.collections.joinToString
 import com.example.unplayedgameslist.R
 import com.example.unplayedgameslist.data.db.GameDetailEntity
 import com.example.unplayedgameslist.data.db.GameEntity
@@ -64,8 +65,12 @@ class GameDetailDialogFragment(private val gameEntity: GameEntity) : DialogFragm
         //binding.gameGenre.text = details.genres ?: getString(R.string.unknown_genre)
 
         // Muestra los desarrolladores y publicadores si están disponibles
-        binding.gameDevelopers.text = details.developers ?: getString(R.string.unknown_developers)
-        binding.gamePublishers.text = details.publishers ?: getString(R.string.unknown_publishers)
+        binding.gameDevelopers.text =
+            getString(R.string.developers, details.developers)
+
+        binding.gamePublishers.text =
+            getString(R.string.publishers, details.publishers)
+
         binding.gameDescription.text = details.shortDescription
 
         Glide.with(requireContext())

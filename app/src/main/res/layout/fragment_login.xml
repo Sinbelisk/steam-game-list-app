@@ -9,6 +9,17 @@
     tools:context=".ui.fragments.LoginFragment"
     android:background="#171A21">
 
+    <!-- Texto de título "Inicio de Sesión" -->
+    <TextView
+        android:id="@+id/tvLoginTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Inicio de Sesión"
+        android:textSize="24sp"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="32dp"
+        android:gravity="center" />
+
     <!-- EditText para SteamID -->
     <EditText
         android:id="@+id/etSteamID"
