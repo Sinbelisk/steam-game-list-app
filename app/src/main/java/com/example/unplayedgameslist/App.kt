@@ -40,7 +40,7 @@ class App : Application() {
         initRepository()
 
         // Llamar a la función para sincronizar datos
-        //initializeDataSynchronization()
+        initializeDataSynchronization()
     }
 
     private fun initApi() {
