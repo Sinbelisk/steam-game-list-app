@@ -19,6 +19,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
 
     private val prefsManager = App.prefsManager
 
+    // Carga los juegos desde la API o base de datos si es necesario
     fun loadGames() {
         val steamAPI = prefsManager.getSteamAPI()
         val steamID64 = prefsManager.getSteamID64()
@@ -28,27 +29,23 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
             return
         }
 
+        // Si es necesario sincronizar los datos, lo hacemos aquí
         viewModelScope.launch {
             try {
-                val games = gameRepository.fetchAllGamesFromApi(steamAPI, steamID64)
+                // Obtener juegos filtrados y ordenados
+                val games = gameRepository.getMostPlayedGames()
 
-                // Obtener las configuraciones
-                val sortType = prefsManager.getSortType() ?: SortType.DESC
-                val hidePlayed = prefsManager.getHidePlayed()
-
-                // Filtrar y ordenar los juegos según las configuraciones
-                val filteredAndSortedGames = games
-                    .filter { game -> !hidePlayed || game.playtimeForever!! > 0 }  // Excluir juegos jugados si 'hidePlayed' es true
-                    .sortedByDescending { game ->
-                        if (sortType == SortType.DESC) game.playtimeForever else -game.playtimeForever!!
-                    }
+                Log.d("GameViewModel", "Juegos cargados: ${games.size}")
+                games.forEach { Log.d("GameViewModel", "Juego: ${it.name}, Horas: ${it.playtime}") }
 
                 // Actualizar los datos del LiveData
-                gamesLiveData.postValue(filteredAndSortedGames.map { it.toEntity(status = "default") })
+                gamesLiveData.postValue(games)
             } catch (e: Exception) {
                 Log.e("GameViewModel", "Error al cargar los juegos desde la API", e)
             }
         }
     }
+
 }
+
 

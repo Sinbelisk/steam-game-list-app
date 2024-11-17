@@ -4,8 +4,10 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.unplayedgameslist.App
 import com.example.unplayedgameslist.data.repository.GameRepository
+import kotlinx.coroutines.launch
 
 class LoginViewModel : ViewModel() {
     private val _loginStatus = MutableLiveData<Boolean>()
@@ -24,9 +26,9 @@ class LoginViewModel : ViewModel() {
         if (steamId == savedUser && password == savedPass) { // Lógica de ejemplo
             _loginStatus.value = true
             prefs.setUserLoginStatus(true)
+
         } else {
             _loginStatus.value = false
-
             // esto puede causar problemas.
             prefs.setUserLoginStatus(false)
         }

@@ -21,7 +21,6 @@ class SteamGamesFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var gameAdapter: GameAdapter
     private lateinit var gameViewModel: GameViewModel
-    private lateinit var settingsViewModel: SettingsDialogViewModel  // Añadir el ViewModel de configuraciones
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,30 +28,25 @@ class SteamGamesFragment : Fragment() {
     ): View {
         val binding = FragmentSteamGamesBinding.inflate(inflater, container, false)
 
-        // Configura el RecyclerView
+        // Inicialización del ViewModel
+        gameViewModel = ViewModelProvider(this)[GameViewModel::class.java]
+
+        // Obtener la lista inicial desde el ViewModel
+        val initialGames = gameViewModel.gamesLiveData.value ?: emptyList()
+
+        // Configuración inicial del RecyclerView y adaptador
         recyclerView = binding.recyclerView
-        recyclerView.layoutManager = LinearLayoutManager(context)
-        gameAdapter = GameAdapter(emptyList(), requireContext())
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        gameAdapter = GameAdapter(initialGames, requireContext())
         recyclerView.adapter = gameAdapter
 
-        // Configura el ViewModel
-        gameViewModel = ViewModelProvider(this)[GameViewModel::class.java]
-        settingsViewModel = ViewModelProvider(this)[SettingsDialogViewModel::class.java] // Inicializa el ViewModel de configuraciones
-
-        // Observa cambios en la lista de juegos
+        // Observa cambios en la lista de juegos y actualiza el adaptador
         gameViewModel.gamesLiveData.observe(viewLifecycleOwner) { games ->
-            // Verifica si la lista ha cambiado y actualiza el adaptador
-            if (games != null) {
-                gameAdapter.updateGames(games)
+            if (!games.isNullOrEmpty()) {
+                gameAdapter.updateGames(games) // Actualiza el adaptador con los nuevos datos
+            } else {
+                Log.w("SteamGamesFragment", "La lista de juegos está vacía.")
             }
-        }
-
-        settingsViewModel.sortOption.observe(viewLifecycleOwner) {
-            gameViewModel.loadGames()  // Recargar juegos con la nueva configuración de orden
-        }
-
-        settingsViewModel.excludePlayed.observe(viewLifecycleOwner) {
-            gameViewModel.loadGames()  // Recargar juegos con la nueva configuración de exclusión de jugados
         }
 
         return binding.root
@@ -61,17 +55,12 @@ class SteamGamesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Cargar los juegos
+        // Carga inicial de juegos desde el ViewModel
         gameViewModel.loadGames()
 
-        // Agregar un callback para que las configuraciones se recarguen al cambiar
-        App.prefsManager.apply {
-            getSortType()?.let { gameViewModel.loadGames() }
-            getHidePlayed().let { gameViewModel.loadGames() }
-        }
-
+        // Manejo del botón de retroceso
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-            // Aquí puedes manejar el evento de la tecla "Atrás"
+
         }
     }
 }

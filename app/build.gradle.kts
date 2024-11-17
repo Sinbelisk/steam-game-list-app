@@ -73,6 +73,7 @@ dependencies {
     //coroutinas
     implementation(libs.androidx.lifecycle.viewmodel.ktx)  // Para viewModelScope
     implementation(libs.kotlinx.coroutines.android)  // Para Kotlin Coroutines
+    implementation("androidx.work:work-runtime-ktx:2.8.0")
 
     // libreria para encriptar datos
     implementation(libs.androidx.security.crypto)

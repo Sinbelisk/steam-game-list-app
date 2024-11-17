@@ -1,66 +1,68 @@
 package com.example.unplayedgameslist.data.repository
 
-import com.example.unplayedgameslist.data.api.data.OwnedGameData
 import com.example.unplayedgameslist.data.db.GameEntity
 
 import android.util.Log
-import com.example.unplayedgameslist.data.api.data.GameDetailData
+import com.example.unplayedgameslist.data.api.mappers.GameDetailMapper
+import com.example.unplayedgameslist.data.api.mappers.GameEntityMapper
+import com.example.unplayedgameslist.data.db.GameDao
+import com.example.unplayedgameslist.data.db.UserAddedGameEntity
 
 class GameRepository(
     private val apiDataSource: ApiDataSource,
-    private val dbDataSource: DBDataSource
+    private val gameDao: GameDao
 ) {
     companion object {
         private const val TAG = "GameRepository"
     }
 
-    // Obtener todos los juegos desde la API
-    suspend fun fetchAllGamesFromApi(apiKey: String, steamId64: Long): List<OwnedGameData> {
-        return try {
-            Log.d(TAG, "Fetching all games from API...")
-            val games = apiDataSource.fetchOwnedGames(apiKey, steamId64) ?: emptyList()
-            Log.d(TAG, "Successfully fetched ${games.size} games from API.")
-            games
-        } catch (e: Exception) {
-            Log.e(TAG, "Error fetching games from API", e)
-            emptyList()
-        }
-    }
-
-    // Obtener detalles de un juego desde la API
-    suspend fun fetchGameDetails(appId: Int): GameDetailData? {
-        return try {
-            Log.d(TAG, "Fetching details for game with appId: $appId")
-            val response = apiDataSource.fetchGameDetails(appId)
-            response?.body()?.get(appId.toString())?.data
-        } catch (e: Exception) {
-            Log.e(TAG, "Error fetching game details from API", e)
-            null
-        }
-    }
-
-    // Obtener todos los juegos desde la base de datos
-    suspend fun fetchAllGamesFromDB(): List<GameEntity> {
-        return try {
-            Log.d(TAG, "Fetching all games from DB...")
-            val games = dbDataSource.getAllGames()
-            Log.d(TAG, "Successfully fetched ${games.size} games from DB.")
-            games
-        } catch (e: Exception) {
-            Log.e(TAG, "Error fetching games from DB", e)
-            emptyList()
-        }
-    }
-
-    // Guardar o actualizar todos los juegos en la base de datos
-    suspend fun saveGamesToDB(games: List<GameEntity>) {
+    suspend fun synchronizeData(apiKey: String, steamId64: Long) {
         try {
-            Log.d(TAG, "Saving ${games.size} games to DB...")
-            dbDataSource.insertAll(games)
-            Log.d(TAG, "Successfully saved games to DB.")
+            // Obtener juegos del usuario
+            val ownedGames = apiDataSource.fetchOwnedGames(apiKey, steamId64)
+
+            ownedGames?.let {
+                // Insertar juegos en la base de datos
+                val gameEntities = it.map { game -> GameEntityMapper.toEntity(game) }
+                gameDao.insertGames(gameEntities)
+
+                // Obtener detalles de cada juego
+                it.forEach { ownedGame ->
+                    val gameDetailsResponse = apiDataSource.fetchGameDetails(ownedGame.appId)
+
+                    gameDetailsResponse?.let { response ->
+                        val gameDetailResponse = response.body()?.values?.firstOrNull()
+                        gameDetailResponse?.data?.let { data ->
+                            val gameDetailEntity = GameDetailMapper.toEntity(data)
+                            gameDao.insertGameDetails(listOf(gameDetailEntity))
+                        }
+                    }
+                }
+            } ?: Log.w("SynchronizeData", "No se obtuvieron juegos del usuario.")
         } catch (e: Exception) {
-            Log.e(TAG, "Error saving games to DB", e)
+            Log.e("SynchronizeData", "Error al sincronizar los datos", e)
         }
+    }
+
+
+    // Obtener los juegos con 0 horas jugadas
+    suspend fun getGamesWithZeroPlaytime(): List<GameEntity> {
+        return gameDao.getGamesWithZeroPlaytime()
+    }
+
+    // Obtener los juegos más jugados
+    suspend fun getMostPlayedGames(): List<GameEntity> {
+        return gameDao.getMostPlayedGames()
+    }
+
+    // Obtener los juegos menos jugados
+    suspend fun getLeastPlayedGames(): List<GameEntity> {
+        return gameDao.getLeastPlayedGames()
+    }
+
+    // Insertar un juego manualmente añadido por el usuario
+    suspend fun addUserGame(game: UserAddedGameEntity) {
+        gameDao.insertUserAddedGame(game)
     }
 
     suspend fun getSteamID64(apiKey: String, vanityUrl: String): Long? {

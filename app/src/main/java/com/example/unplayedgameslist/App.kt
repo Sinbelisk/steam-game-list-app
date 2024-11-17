@@ -5,7 +5,6 @@ import android.util.Log
 import com.example.unplayedgameslist.data.api.SteamApiService
 import com.example.unplayedgameslist.data.db.GameDatabase
 import com.example.unplayedgameslist.data.repository.ApiDataSource
-import com.example.unplayedgameslist.data.repository.DBDataSource
 import com.example.unplayedgameslist.data.repository.GameRepository
 import com.example.unplayedgameslist.data.PreferencesManager
 import okhttp3.OkHttpClient
@@ -61,9 +60,8 @@ class App : Application() {
     private fun initRepository() {
         val apiService = retrofit.create(SteamApiService::class.java)
         val apiDataSource = ApiDataSource(apiService)
-        val dbDataSource = DBDataSource(gameDatabase.gameDao())
 
-        gameRepository = GameRepository(apiDataSource, dbDataSource)
+        gameRepository = GameRepository(apiDataSource, gameDatabase.gameDao())
     }
 }
 
