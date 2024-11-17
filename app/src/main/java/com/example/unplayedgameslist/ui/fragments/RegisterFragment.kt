@@ -4,35 +4,39 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.Toast
-import com.example.unplayedgameslist.App
+import androidx.lifecycle.ViewModelProvider
 import com.example.unplayedgameslist.R
-import com.example.unplayedgameslist.data.PreferencesManager
 import com.example.unplayedgameslist.databinding.FragmentRegisterBinding
 import com.example.unplayedgameslist.ui.MainActivity
+import com.example.unplayedgameslist.ui.viewmodels.RegisterViewModel
 
 class RegisterFragment : Fragment(R.layout.fragment_register) {
     private lateinit var binding: FragmentRegisterBinding
-    private lateinit var prefs: PreferencesManager
+    private lateinit var registerViewModel: RegisterViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentRegisterBinding.bind(view)
 
-        prefs = App.prefsManager
+        registerViewModel = ViewModelProvider(this).get(RegisterViewModel::class.java)
+
+        // Observar el estado de la registración
+        registerViewModel.registerStatus.observe(viewLifecycleOwner) { isSuccess ->
+            if (isSuccess) {
+                Toast.makeText(requireContext(), "Registración exitosa", Toast.LENGTH_SHORT).show()
+                (activity as MainActivity).changeFragment(LoginFragment())  // Cambia a LoginFragment
+            } else {
+                Toast.makeText(requireContext(), "Error en la registración", Toast.LENGTH_SHORT).show()
+            }
+        }
 
         binding.btnRegisterRegister.setOnClickListener {
-            registerAction()
-        }
-    }
+            val steamID = binding.etSteamIDRegister.text.toString()
+            val password = binding.etPasswordRegister.text.toString()
+            val apiKey = binding.etSteamApi.text.toString()
 
-    private fun registerAction() {
-        // Lógica de validación y guardado de datos
-        prefs.saveData(
-            binding.etSteamIDRegister.text.toString(),
-            binding.etPasswordRegister.text.toString(),
-            binding.etSteamApi.text.toString()
-        )
-        Toast.makeText(requireContext(), "Registración exitosa", Toast.LENGTH_SHORT).show()
-        (activity as MainActivity).changeFragment(LoginFragment())  // Cambia de vuelta a LoginFragment
+            // Llamar al ViewModel para realizar la registración
+            registerViewModel.register(steamID, password, apiKey)
+        }
     }
 }
