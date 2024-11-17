@@ -30,7 +30,7 @@ class SteamGamesFragment : Fragment() {
 
         // Configura el RecyclerView
         recyclerView = binding.recyclerView
-        recyclerView.layoutManager = LinearLayoutManager(context) // Set the LayoutManager
+        recyclerView.layoutManager = LinearLayoutManager(context)
         gameAdapter = GameAdapter(emptyList(), requireContext())
         recyclerView.adapter = gameAdapter
 
@@ -40,17 +40,6 @@ class SteamGamesFragment : Fragment() {
         // Observar los cambios en la lista de juegos
         gameViewModel.gamesLiveData.observe(viewLifecycleOwner) { games ->
             gameAdapter.updateGames(games)  // Actualiza el adaptador con los nuevos juegos
-        }
-
-        // Cargar juegos desde la API
-        val prefs = App.prefsManager
-        val steamAPI = prefs.getSteamAPI()
-        val steamID = prefs.getSteamID()
-
-        if (steamAPI != null && steamID != null) {
-            gameViewModel.loadGames(steamAPI, steamID)
-        } else {
-            Log.e("SteamGamesFragment", "SteamAPI o SteamID no encontrados en preferencias.")
         }
 
         return binding.root

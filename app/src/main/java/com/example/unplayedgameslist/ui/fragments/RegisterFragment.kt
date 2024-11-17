@@ -18,7 +18,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentRegisterBinding.bind(view)
 
-        registerViewModel = ViewModelProvider(this).get(RegisterViewModel::class.java)
+        registerViewModel = ViewModelProvider(this)[RegisterViewModel::class.java]
 
         // Observar el estado de la registración
         registerViewModel.registerStatus.observe(viewLifecycleOwner) { isSuccess ->

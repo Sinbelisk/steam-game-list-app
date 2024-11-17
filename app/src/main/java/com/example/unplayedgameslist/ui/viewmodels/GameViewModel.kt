@@ -13,27 +13,26 @@ import kotlinx.coroutines.launch
 
 class GameViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val gameRepository: GameRepository = App.gameRepository
-    val gamesLiveData: MutableLiveData<List<GameEntity>> = MutableLiveData()
+    private val gameRepository = App.gameRepository
+    val gamesLiveData = MutableLiveData<List<GameEntity>>()
 
-    // Método para cargar todos los juegos desde la API
-    fun loadGames(apiKey: String, steamId: String) {
+    fun loadGames() {
+        val steamAPI = App.prefsManager.getSteamAPI()
+        val steamID = App.prefsManager.getSteamID()
+
+        if (steamAPI == null || steamID == null) {
+            Log.e("GameViewModel", "SteamAPI o SteamID no encontrados.")
+            return
+        }
+
         viewModelScope.launch {
             try {
-                val gamesFromApi = gameRepository.fetchAllGamesFromApi(apiKey, steamId)
-                if (gamesFromApi.isNotEmpty()) {
-                    val gameEntities = gamesFromApi.map {
-                        it.toEntity(status = "default")
-                    }
-                    gamesLiveData.postValue(gameEntities)
-                    Log.d("GameViewModel", "Games loaded: ${gameEntities.size}")
-                } else {
-                    Log.d("GameViewModel", "No games found.")
-                }
+                // Asegúrate de no pasar null para steamID
+                val games = gameRepository.fetchAllGamesFromApi(steamAPI, steamID)
+                gamesLiveData.postValue(games.map { it.toEntity(status = "default") })
             } catch (e: Exception) {
                 Log.e("GameViewModel", "Error al cargar los juegos desde la API", e)
             }
         }
     }
-
 }
