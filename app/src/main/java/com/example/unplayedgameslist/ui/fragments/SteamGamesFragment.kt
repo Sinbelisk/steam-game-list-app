@@ -47,9 +47,11 @@ class SteamGamesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        //carga los juegos.
+        gameViewModel.loadGames()
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner){
 
         }
     }
-
 }

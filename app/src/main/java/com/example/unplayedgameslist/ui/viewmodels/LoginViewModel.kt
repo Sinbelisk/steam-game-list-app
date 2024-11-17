@@ -15,5 +15,7 @@ class LoginViewModel : ViewModel() {
         } else {
             _loginStatus.value = false
         }
+        // forzado de true para depurar
+        _loginStatus.value = true
     }
 }
