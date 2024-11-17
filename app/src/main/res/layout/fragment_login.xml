@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:padding="16dp"
-    tools:context=".ui.RegisterActivity">
-
+    android:orientation="vertical"
+    tools:context=".ui.fragments.LoginFragment">
 
     <EditText
-        android:id="@+id/etSteamIDRegister"
+        android:id="@+id/etSteamID"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:autofillHints=""
@@ -19,7 +17,7 @@
         android:minHeight="48dp" />
 
     <EditText
-        android:id="@+id/etPasswordRegister"
+        android:id="@+id/etPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:autofillHints=""
@@ -27,18 +25,16 @@
         android:inputType="textPassword"
         android:minHeight="48dp" />
 
-    <EditText
-        android:id="@+id/etSteamApi"
+    <Button
+        android:id="@+id/btnLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:autofillHints=""
-        android:hint="Steam API KEY"
-        android:inputType="text"
-        android:minHeight="48dp" />
+        android:text="Iniciar Sesión" />
 
     <Button
-        android:id="@+id/btnRegisterRegister"
+        android:id="@+id/btnRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Registrarse" />
+
 </LinearLayout>

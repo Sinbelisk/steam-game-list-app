@@ -58,7 +58,10 @@ dependencies {
 
     // Dependencias para Room
     implementation(libs.androidx.room.runtime)   // Room runtime
-    implementation(libs.androidx.room.ktx)       // Room KTX (opcional, pero recomendado para Kotlin)
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.legacy.support.v4)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.fragment.ktx)       // Room KTX (opcional, pero recomendado para Kotlin)
 
     // Dependencia de KSP para Room (esta es la parte nueva)
     ksp(libs.androidx.room.compiler)   // Room KSP compiler

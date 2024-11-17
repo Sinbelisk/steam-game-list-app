@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.SteamGamesFragment">
+    tools:context=".ui.fragments.SteamGamesFragment">
 
     <!-- RecyclerView para mostrar los juegos -->
     <androidx.recyclerview.widget.RecyclerView

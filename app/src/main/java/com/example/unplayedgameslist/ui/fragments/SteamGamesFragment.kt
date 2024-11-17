@@ -1,4 +1,4 @@
-package com.example.unplayedgameslist.ui
+package com.example.unplayedgameslist.ui.fragments
 
 import android.os.Bundle
 import android.util.Log
@@ -10,8 +10,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.unplayedgameslist.App
-import com.example.unplayedgameslist.R
 import com.example.unplayedgameslist.databinding.FragmentSteamGamesBinding
+import com.example.unplayedgameslist.ui.adapters.GameAdapter
+import com.example.unplayedgameslist.ui.viewmodels.GameViewModel
 
 class SteamGamesFragment : Fragment() {
 

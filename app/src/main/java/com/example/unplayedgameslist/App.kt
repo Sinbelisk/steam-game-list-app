@@ -2,13 +2,12 @@ package com.example.unplayedgameslist
 
 import android.app.Application
 import android.util.Log
-import androidx.room.Room
 import com.example.unplayedgameslist.data.api.SteamApiService
 import com.example.unplayedgameslist.data.db.GameDatabase
 import com.example.unplayedgameslist.data.repository.ApiDataSource
 import com.example.unplayedgameslist.data.repository.DBDataSource
 import com.example.unplayedgameslist.data.repository.GameRepository
-import com.example.unplayedgameslist.ui.PreferencesManager
+import com.example.unplayedgameslist.data.PreferencesManager
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -17,7 +16,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 class App : Application() {
     companion object {
         private const val STEAM_BASE_URL: String = "https://api.steampowered.com/"
-        private const val DATABASE_NAME: String = "game_database"
 
         lateinit var prefsManager: PreferencesManager
         lateinit var gameRepository: GameRepository

@@ -1,4 +1,4 @@
-package com.example.unplayedgameslist.ui
+package com.example.unplayedgameslist.ui.adapters
 
 
 import android.content.Context

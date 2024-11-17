@@ -1,4 +1,4 @@
-package com.example.unplayedgameslist.ui
+package com.example.unplayedgameslist.ui.viewmodels
 
 import android.app.Application
 import android.util.Log

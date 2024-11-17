@@ -1,4 +1,4 @@
-package com.example.unplayedgameslist.ui
+package com.example.unplayedgameslist.data
 
 import android.content.Context
 import android.content.SharedPreferences
