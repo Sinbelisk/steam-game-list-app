@@ -18,6 +18,10 @@ import com.example.unplayedgameslist.ui.adapters.GameAdapter
 import com.example.unplayedgameslist.ui.viewmodels.GameViewModel
 import com.example.unplayedgameslist.ui.viewmodels.SettingsDialogViewModel
 
+/**
+ * Fragment that displays a list of Steam games in a RecyclerView.
+ * It allows users to interact with the list and displays game details in a dialog.
+ */
 class SteamGamesFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
@@ -25,29 +29,38 @@ class SteamGamesFragment : Fragment() {
     private lateinit var gameViewModel: GameViewModel
     private lateinit var settingsDialogViewModel: SettingsDialogViewModel
 
+    /**
+     * Inflates the view and initializes the necessary ViewModels and RecyclerView.
+     */
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         val binding = FragmentSteamGamesBinding.inflate(inflater, container, false)
 
-        // Inicialización de ViewModels
+        // Initialize ViewModels
         initViewModels()
 
-        // Inicialización de RecyclerView y Adapter
+        // Initialize RecyclerView and Adapter
         initRecyclerView(binding)
 
-        // Observamos los cambios en las preferencias
+        // Observe changes in the settings
         observeSettingsChanges()
 
         return binding.root
     }
 
+    /**
+     * Initializes the ViewModels used in this fragment.
+     */
     private fun initViewModels() {
         gameViewModel = ViewModelProvider(this)[GameViewModel::class.java]
         settingsDialogViewModel = ViewModelProvider(requireActivity()).get(SettingsDialogViewModel::class.java)
     }
 
+    /**
+     * Initializes the RecyclerView and the GameAdapter to display the games list.
+     */
     private fun initRecyclerView(binding: FragmentSteamGamesBinding) {
         recyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -60,6 +73,9 @@ class SteamGamesFragment : Fragment() {
         recyclerView.adapter = gameAdapter
     }
 
+    /**
+     * Observes changes to the settings, including sorting options and the exclude played filter.
+     */
     private fun observeSettingsChanges() {
         settingsDialogViewModel.sortOption.observe(viewLifecycleOwner) { sortOption ->
             val excludePlayed = settingsDialogViewModel.excludePlayed.value ?: false
@@ -71,32 +87,39 @@ class SteamGamesFragment : Fragment() {
             loadGames(sortOption, excludePlayed)
         }
 
-        // Observamos la LiveData de juegos de GameViewModel
+        // Observes the LiveData for the games list
         gameViewModel.gamesLiveData.observe(viewLifecycleOwner) { games ->
             games?.let { gameAdapter.updateGames(it) }
                 ?: Log.w("SteamGamesFragment", "La lista de juegos está vacía.")
         }
     }
 
+    /**
+     * Loads the games based on the current sorting option and exclude played filter.
+     */
     private fun loadGames(sortOption: SortType, excludePlayed: Boolean) {
-        gameViewModel.loadGames(sortOption, excludePlayed)  // Cargamos juegos con la nueva configuración
+        gameViewModel.loadGames(sortOption, excludePlayed)  // Load games with the updated settings
     }
 
+    /**
+     * Called after the fragment's view is created. Sets up the settings bar and loads the games initially.
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Carga el fragmento de SettingsBar en la parte inferior
+        // Load the settings bar fragment in the container
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.settings_bar_container, NavigationMenuFragment.newInstance())
             .commit()
 
-        // Carga inicial de juegos según la configuración actual
+        // Load initial games according to the current settings
         val sortOption = settingsDialogViewModel.sortOption.value ?: SortType.DESC
         val excludePlayed = settingsDialogViewModel.excludePlayed.value ?: false
         loadGames(sortOption, excludePlayed)
 
+        // Disable back navigation
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-            // Do nothing or add custom logic to disable back navigation
+
         }
     }
 }

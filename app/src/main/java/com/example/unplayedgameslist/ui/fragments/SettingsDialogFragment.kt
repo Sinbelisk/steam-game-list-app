@@ -19,6 +19,9 @@ import com.example.unplayedgameslist.databinding.FragmentSettingsDialogBinding
 import com.example.unplayedgameslist.ui.SortType
 import com.example.unplayedgameslist.ui.viewmodels.SettingsDialogViewModel
 
+/**
+ * Fragment representing a settings dialog where the user can modify sorting options and the filter for excluding played games.
+ */
 class SettingsDialogFragment : DialogFragment() {
 
     private lateinit var sortSpinner: Spinner
@@ -26,41 +29,48 @@ class SettingsDialogFragment : DialogFragment() {
     private lateinit var saveButton: Button
     private lateinit var cancelButton: Button
 
-    // Cambia el acceso al ViewModel a través de la actividad
+    // ViewModel shared across fragments
     private lateinit var settingsViewModel: SettingsDialogViewModel
 
     companion object {
+        // Factory method for creating a new instance of the dialog
         fun newInstance() = SettingsDialogFragment()
     }
 
+    /**
+     * Inflates the dialog's view, sets up the spinner and checkbox, and observes the ViewModel for data changes.
+     */
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val binding = FragmentSettingsDialogBinding.inflate(inflater, container, false)
 
-        // Inicializamos el SettingsDialogViewModel para ser compartido entre fragmentos
+        // Initialize ViewModel
         settingsViewModel = ViewModelProvider(requireActivity()).get(SettingsDialogViewModel::class.java)
 
-        // Inicialización de los elementos de la vista
+        // Bind UI elements
         sortSpinner = binding.sortSpinner
         excludePlayedCheckbox = binding.excludePlayedCheckbox
         saveButton = binding.saveButton
         cancelButton = binding.cancelButton
 
-        // Configurar el Spinner con opciones de ordenación
+        // Configure the spinner for sorting options
         setupSortSpinner()
 
-        // Observar cambios en el ViewModel
+        // Observe changes in the ViewModel
         observeViewModel()
 
-        // Configuración de las acciones de los botones
+        // Set click listeners for the buttons
         saveButton.setOnClickListener { onSaveClicked() }
         cancelButton.setOnClickListener { onCancelClicked() }
 
         return binding.root
     }
 
+    /**
+     * Sets up the spinner with available sorting options from the `SortType` enum.
+     */
     private fun setupSortSpinner() {
         val sortOptions = SortType.entries.map { it.label }
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, sortOptions)
@@ -68,6 +78,9 @@ class SettingsDialogFragment : DialogFragment() {
         sortSpinner.adapter = adapter
     }
 
+    /**
+     * Observes changes in the ViewModel and updates the UI elements accordingly.
+     */
     private fun observeViewModel() {
         settingsViewModel.sortOption.observe(viewLifecycleOwner) { selectedOption ->
             val position = SortType.values().indexOf(selectedOption)
@@ -79,35 +92,43 @@ class SettingsDialogFragment : DialogFragment() {
         }
     }
 
+    /**
+     * Handles saving the user's settings, updating the ViewModel, and dismissing the dialog.
+     */
     private fun onSaveClicked() {
         val selectedSortLabel = sortSpinner.selectedItem.toString()
         val selectedSortOption = SortType.values().first { it.label == selectedSortLabel }
         val excludePlayed = excludePlayedCheckbox.isChecked
 
-        // Actualizamos el ViewModel con los valores seleccionados
+        // Update ViewModel with selected settings
         settingsViewModel.apply {
             setSortOption(selectedSortOption)
             setExcludePlayed(excludePlayed)
         }
 
-        // Guardamos la configuración (puedes agregar lógica de almacenamiento persistente aquí)
+        // Save the settings (you can add logic for persistent storage here)
         settingsViewModel.saveSettings()
 
         dismiss()
     }
 
+    /**
+     * Handles the cancel button click, resetting settings to defaults and dismissing the dialog.
+     */
     private fun onCancelClicked() {
-        // Restablecemos las configuraciones a los valores predeterminados
         settingsViewModel.resetSettings()
         dismiss()
     }
 
+    /**
+     * Creates and customizes the dialog, including adjusting its size.
+     */
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(true)
 
-        // Ajuste para el tamaño del diálogo
+        // Adjust dialog size
         val window = dialog.window
         val layoutParams = WindowManager.LayoutParams()
         layoutParams.copyFrom(window?.attributes)

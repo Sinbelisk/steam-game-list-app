@@ -13,33 +13,54 @@ import com.example.unplayedgameslist.ui.fragments.LoginFragment
 import com.example.unplayedgameslist.ui.fragments.NavigationMenuFragment
 import kotlinx.coroutines.launch
 
+
+/**
+ * MainActivity is the entry point of the application.
+ * It is responsible for managing the main user interface and fragment navigation.
+ * The activity also initializes key dependencies such as preferences and the repository.
+ */
 class MainActivity : AppCompatActivity() {
+
+    // ViewBinding instance to access UI elements in the activity
     private lateinit var binding: ActivityMainBinding
+
+    // PreferencesManager instance for accessing user preferences
     private val prefs = App.prefsManager
+
+    // Repository for managing game data
     private val repository = App.gameRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Enables the edge-to-edge mode for immersive UI experience
         enableEdgeToEdge()
+
+        // Set up the content view for the activity
         setContentView(R.layout.activity_main)
 
+        // Initialize ViewBinding
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // If it's the first time the activity is being created, replace with the Login fragment
         if (savedInstanceState == null) {
-            // Reemplaza el fragmento con el fragmento de Login por defecto
             supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, LoginFragment())
                 .commit()
         }
-
     }
 
-    // Método para cambiar fragmentos
+    /**
+     * Changes the currently displayed fragment.
+     * It replaces the current fragment with a new one and adds it to the back stack for navigation.
+     *
+     * @param fragment The new fragment to display.
+     */
     fun changeFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragment)
-            .addToBackStack(null)  // Esto permite la navegación hacia atrás
+            .addToBackStack(null)  // Allows navigating back to the previous fragment
             .commit()
     }
 }

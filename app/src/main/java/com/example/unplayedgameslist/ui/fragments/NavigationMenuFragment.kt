@@ -13,42 +13,56 @@ import com.example.unplayedgameslist.databinding.FragmentSettingsDialogBinding
 import com.example.unplayedgameslist.ui.MainActivity
 import com.example.unplayedgameslist.ui.viewmodels.NavigationMenuViewModel
 
+/**
+ * Fragment representing a navigation menu with options for logging out and accessing settings.
+ * Contains buttons for logout and settings, each with corresponding actions.
+ */
 class NavigationMenuFragment : Fragment() {
 
     companion object {
+        // Factory method for creating a new instance of the fragment.
         fun newInstance() = NavigationMenuFragment()
     }
 
     private val viewModel: NavigationMenuViewModel by viewModels()
 
-    // Referencias a los botones
+    // Button references
     private lateinit var logoutButton: Button
     private lateinit var optionsButton: Button
 
+    /**
+     * Inflates the fragment's view, initializes buttons, and sets up click listeners for actions.
+     */
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val binding = FragmentSettingsBarBinding.inflate(inflater, container, false)
 
-        // Inicializar los botones
+        // Initialize buttons
         logoutButton = binding.logoutButton
         optionsButton = binding.optionsButton
 
-        // Configurar las acciones de los botones
+        // Configure button actions
         logoutButton.setOnClickListener {
+            // Triggers logout in the ViewModel
             viewModel.onLogoutClicked()
 
+            // Navigate to the login screen
             (activity as MainActivity).changeFragment(LoginFragment())
         }
 
         optionsButton.setOnClickListener {
+            // Show the settings dialog
             showSettingsDialog()
         }
 
         return binding.root
     }
 
+    /**
+     * Displays the settings dialog.
+     */
     private fun showSettingsDialog() {
         val settingsFragment = SettingsDialogFragment.newInstance()
         settingsFragment.show(parentFragmentManager, "settingsDialog")

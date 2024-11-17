@@ -12,50 +12,69 @@ import com.example.unplayedgameslist.databinding.FragmentLoginBinding
 import com.example.unplayedgameslist.ui.MainActivity
 import com.example.unplayedgameslist.ui.viewmodels.LoginViewModel
 
+/**
+ * Fragment that manages the user login process.
+ * Handles login attempts by validating user credentials and automatically logging in the user if credentials are available.
+ * Provides options for both login and registration.
+ */
 class LoginFragment : Fragment(R.layout.fragment_login) {
     private lateinit var binding: FragmentLoginBinding
     private lateinit var loginViewModel: LoginViewModel
 
+    /**
+     * Initializes the fragment's view and view model, sets up UI actions,
+     * and tries to auto-login the user if valid credentials exist.
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentLoginBinding.bind(view)
 
-        // asignación del viewmodel
+        // Instantiate the ViewModel
         loginViewModel = ViewModelProvider(this)[LoginViewModel::class.java]
 
         setupActions()
 
-        // SI ya hay un usuario definido, inicia sesion directamente.
+        // Automatically log in if credentials are saved
         if(loginViewModel.tryAutoLogin()){
             changeActivity()
         }
     }
 
+    /**
+     * Sets up actions for the login and register buttons.
+     * Observes the login status from the ViewModel.
+     */
     private fun setupActions() {
+        // Login button click listener
         binding.btnLogin.setOnClickListener {
-                val steamId = binding.etSteamID.text.toString()
-                val password = binding.etPassword.text.toString()
+            val steamId = binding.etSteamID.text.toString()
+            val password = binding.etPassword.text.toString()
 
-                loginViewModel.login(steamId, password)
+            // Trigger the login process in the ViewModel
+            loginViewModel.login(steamId, password)
         }
 
-        // Observar el estado del login
+        // Observing the login status for success or failure
         loginViewModel.loginStatus.observe(viewLifecycleOwner) { isSuccess ->
             if (isSuccess) {
                 Toast.makeText(requireContext(), "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show()
-                changeActivity()
+                changeActivity() // Navigate to the next screen on successful login
             } else {
                 Toast.makeText(requireContext(), "Credenciales incorrectas", Toast.LENGTH_SHORT).show()
             }
         }
 
+        // Register button click listener to navigate to the registration fragment
         binding.btnRegister.setOnClickListener {
             (activity as MainActivity).changeFragment(RegisterFragment())
-
         }
     }
 
+    /**
+     * Navigates to the SteamGamesFragment after a successful login.
+     */
     private fun changeActivity(){
         (activity as MainActivity).changeFragment(SteamGamesFragment())
     }
 }
+

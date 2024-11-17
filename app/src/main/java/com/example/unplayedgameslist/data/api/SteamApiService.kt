@@ -7,9 +7,20 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface SteamApiService {
+
     /**
-     * Esta interfaz de steam se utiliza para conseguir la información de los juegos de la biblioteca
-     * de un usuario.
+     * Retrieves the list of games owned by a user in their Steam library.
+     *
+     * This method communicates with the Steam API to fetch the user's game library,
+     * including information such as the appId, game name, and playtime. It is designed to
+     * return the owned games with specific information (e.g., whether to include free-to-play games).
+     *
+     * @param apiKey The Steam API key for authenticating the request.
+     * @param steamID64 The Steam ID (64-bit) of the user whose owned games are being requested.
+     * @param includeAppInfo Whether to include additional app information (default: true).
+     * @param includeFreeGames Whether to include free-to-play games (default: false).
+     * @param format The response format (default: "json").
+     * @return A `Response` object containing the list of owned games or an error message.
      */
     @GET("IPlayerService/GetOwnedGames/v0001/")
     suspend fun getOwnedGames(
@@ -22,8 +33,14 @@ interface SteamApiService {
 
 
     /**
-     * Esta interfaz de la API se utiliza para traducir el identificador de texto a el identificador
-     * SteamID64.
+     * Resolves a user's vanity URL (custom Steam URL) to their corresponding SteamID64.
+     *
+     * This method helps convert a vanity URL (a custom URL a user may have set up for their Steam profile)
+     * into a 64-bit Steam ID (SteamID64), which is necessary for other API requests.
+     *
+     * @param apiKey The Steam API key for authenticating the request.
+     * @param vanityUrl The custom URL of the user's Steam profile.
+     * @return A `Response` object containing the resolved SteamID64 or an error message.
      */
     @GET("ISteamUser/ResolveVanityURL/v1/")
     suspend fun resolveVanityURL(
