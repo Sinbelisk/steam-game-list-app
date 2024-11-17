@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import com.example.unplayedgameslist.R
 import com.example.unplayedgameslist.databinding.ActivityMainBinding
 import com.example.unplayedgameslist.ui.fragments.LoginFragment
+import com.example.unplayedgameslist.ui.fragments.NavigationMenuFragment
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -23,6 +24,11 @@ class MainActivity : AppCompatActivity() {
             // Reemplaza el fragmento con el fragmento de Login por defecto
             supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, LoginFragment())
+                .commit()
+
+            // Carga el fragmento de SettingsBar en la parte inferior
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.settings_bar_container, NavigationMenuFragment.newInstance())
                 .commit()
         }
     }

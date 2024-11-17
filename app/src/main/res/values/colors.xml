@@ -2,4 +2,29 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Color de fondo de la aplicación -->
+    <color name="background_color">#808080</color> <!-- Gris claro -->
+
+    <!-- Colores para la barra de navegación -->
+    <color name="primary_color">#6200EE</color> <!-- Morado oscuro -->
+    <color name="primary_variant">#3700B3</color> <!-- Variante de color primario (morado más oscuro) -->
+    <color name="on_primary">#FFFFFF</color> <!-- Color del texto en la barra de navegación (blanco) -->
+
+    <!-- Colores para los botones -->
+    <color name="button_color">#6200EE</color> <!-- Color morado para los botones -->
+    <color name="button_text_color">#FFFFFF</color> <!-- Texto blanco en los botones -->
+
+    <!-- Colores secundarios -->
+    <color name="secondary_color">#FF4081</color> <!-- Rosa brillante -->
+    <color name="on_secondary">#FFFFFF</color> <!-- Blanco para el texto en elementos secundarios -->
+
+    <!-- Colores de texto -->
+    <color name="text_primary">#212121</color> <!-- Negro suave para texto principal -->
+    <color name="text_secondary">#757575</color> <!-- Gris para texto secundario -->
+
+    <!-- Colores de estado -->
+    <color name="error_color">#B00020</color> <!-- Rojo para errores -->
+    <color name="success_color">#388E3C</color> <!-- Verde para mensajes de éxito -->
+
 </resources>
