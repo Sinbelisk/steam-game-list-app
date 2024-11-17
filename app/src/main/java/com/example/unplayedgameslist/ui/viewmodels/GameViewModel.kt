@@ -9,6 +9,7 @@ import com.example.unplayedgameslist.App
 import com.example.unplayedgameslist.data.DbApiMapper.Companion.toEntity
 import com.example.unplayedgameslist.data.db.GameEntity
 import com.example.unplayedgameslist.data.repository.GameRepository
+import com.example.unplayedgameslist.ui.SortType
 import kotlinx.coroutines.launch
 
 class GameViewModel(application: Application) : AndroidViewModel(application) {
@@ -16,9 +17,11 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     private val gameRepository = App.gameRepository
     val gamesLiveData = MutableLiveData<List<GameEntity>>()
 
+    private val prefsManager = App.prefsManager
+
     fun loadGames() {
-        val steamAPI = App.prefsManager.getSteamAPI()
-        val steamID64 = App.prefsManager.getSteamID64()
+        val steamAPI = prefsManager.getSteamAPI()
+        val steamID64 = prefsManager.getSteamID64()
 
         if (steamAPI == null || steamID64 == null) {
             Log.e("GameViewModel", "SteamAPI o SteamID no encontrados.")
@@ -27,12 +30,25 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
 
         viewModelScope.launch {
             try {
-                // Asegúrate de no pasar null para steamID
                 val games = gameRepository.fetchAllGamesFromApi(steamAPI, steamID64)
-                gamesLiveData.postValue(games.map { it.toEntity(status = "default") })
+
+                // Obtener las configuraciones
+                val sortType = prefsManager.getSortType() ?: SortType.DESC
+                val hidePlayed = prefsManager.getHidePlayed()
+
+                // Filtrar y ordenar los juegos según las configuraciones
+                val filteredAndSortedGames = games
+                    .filter { game -> !hidePlayed || game.playtimeForever!! > 0 }  // Excluir juegos jugados si 'hidePlayed' es true
+                    .sortedByDescending { game ->
+                        if (sortType == SortType.DESC) game.playtimeForever else -game.playtimeForever!!
+                    }
+
+                // Actualizar los datos del LiveData
+                gamesLiveData.postValue(filteredAndSortedGames.map { it.toEntity(status = "default") })
             } catch (e: Exception) {
                 Log.e("GameViewModel", "Error al cargar los juegos desde la API", e)
             }
         }
     }
 }
+

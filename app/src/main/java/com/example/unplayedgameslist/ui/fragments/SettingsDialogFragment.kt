@@ -15,6 +15,7 @@ import android.widget.Spinner
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.example.unplayedgameslist.databinding.FragmentSettingsDialogBinding
+import com.example.unplayedgameslist.ui.SortType
 import com.example.unplayedgameslist.ui.viewmodels.SettingsDialogViewModel
 
 class SettingsDialogFragment : DialogFragment() {
@@ -56,22 +57,17 @@ class SettingsDialogFragment : DialogFragment() {
     }
 
     private fun setupSortSpinner() {
-        val sortOptions = arrayOf("Más horas jugadas", "Menos horas jugadas")
-        val adapter = ArrayAdapter(requireContext(), R.layout.simple_spinner_item, sortOptions)
+        val sortOptions = SortType.entries.map { it.label }
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, sortOptions)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         sortSpinner.adapter = adapter
     }
 
     private fun observeViewModel() {
         settingsViewModel.sortOption.observe(viewLifecycleOwner) { selectedOption ->
-            // Asegúrate de que selectedOption sea un String
-            val adapter = sortSpinner.adapter as? ArrayAdapter<String>  // Asegurarse de que el adaptador sea del tipo adecuado
-
-            // Verificar si el adaptador es válido
-            if (adapter != null) {
-                val position = adapter.getPosition(selectedOption)  // Obtener la posición
-                sortSpinner.setSelection(position)
-            }
+            // Asegúrate de que selectedOption sea un Enum
+            val position = SortType.values().indexOf(selectedOption)
+            sortSpinner.setSelection(position)
         }
 
         settingsViewModel.excludePlayed.observe(viewLifecycleOwner) { exclude ->
@@ -80,7 +76,8 @@ class SettingsDialogFragment : DialogFragment() {
     }
 
     private fun onSaveClicked() {
-        val selectedSortOption = sortSpinner.selectedItem.toString()
+        val selectedSortLabel = sortSpinner.selectedItem.toString()
+        val selectedSortOption = SortType.values().first { it.label == selectedSortLabel }
         val excludePlayed = excludePlayedCheckbox.isChecked
 
         // Actualizamos el ViewModel con los valores seleccionados

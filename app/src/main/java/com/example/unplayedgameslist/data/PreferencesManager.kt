@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.util.Log
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
+import com.example.unplayedgameslist.ui.SortType
 
 class PreferencesManager(context: Context) {
 
@@ -30,6 +31,9 @@ class PreferencesManager(context: Context) {
         private const val KEY_STEAM_API = "SteamAPI"
         private const val USER_LOGGED = "UserLogged"
         private const val STEAM_ID_64  = "steamID64"
+
+        private const val SORT_TYPE = "sortType"
+        private const val HIDE_PLAYED = "hidePlayed";
     }
 
     // Método para guardar los datos encriptados
@@ -57,6 +61,14 @@ class PreferencesManager(context: Context) {
         }
     }
 
+    fun saveConfig(sortType: SortType, hidePlayed: Boolean) {
+        prefs.edit().apply {
+            putString(SORT_TYPE, sortType.toString())
+            putBoolean(HIDE_PLAYED, hidePlayed)
+            apply()
+        }
+    }
+
 
     // Obtiene el SteamID (custom) descifrado desde las preferencias compartidas.
     fun getSteamID(): String? {
@@ -80,6 +92,18 @@ class PreferencesManager(context: Context) {
     //Obtiene el estado de inicio de sesion del usuario
     fun getUserLoginStatus(): Boolean {
         return prefs.getBoolean(USER_LOGGED, false) // Utiliza la clave correcta aquí
+    }
+
+    fun getSortType() : SortType? {
+        return prefs.getString(SORT_TYPE, null)?.let {
+            SortType.valueOf(
+                it
+            )
+        }
+    }
+
+    fun getHidePlayed() : Boolean{
+        return prefs.getBoolean(HIDE_PLAYED, false)
     }
 }
 
