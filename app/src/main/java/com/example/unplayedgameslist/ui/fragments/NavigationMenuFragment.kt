@@ -10,6 +10,7 @@ import android.widget.Button
 import com.example.unplayedgameslist.R
 import com.example.unplayedgameslist.databinding.FragmentSettingsBarBinding
 import com.example.unplayedgameslist.databinding.FragmentSettingsDialogBinding
+import com.example.unplayedgameslist.ui.MainActivity
 import com.example.unplayedgameslist.ui.viewmodels.NavigationMenuViewModel
 
 class NavigationMenuFragment : Fragment() {
@@ -22,7 +23,6 @@ class NavigationMenuFragment : Fragment() {
 
     // Referencias a los botones
     private lateinit var logoutButton: Button
-    private lateinit var changeButton: Button
     private lateinit var optionsButton: Button
 
     override fun onCreateView(
@@ -33,15 +33,13 @@ class NavigationMenuFragment : Fragment() {
 
         // Inicializar los botones
         logoutButton = binding.logoutButton
-        changeButton = binding.changeButton
         optionsButton = binding.optionsButton
 
         // Configurar las acciones de los botones
         logoutButton.setOnClickListener {
             viewModel.onLogoutClicked()
-        }
-        changeButton.setOnClickListener {
-            viewModel.onChangeClicked()
+
+            (activity as MainActivity).changeFragment(LoginFragment())
         }
 
         optionsButton.setOnClickListener {

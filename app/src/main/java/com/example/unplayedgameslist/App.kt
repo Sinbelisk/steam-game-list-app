@@ -7,6 +7,10 @@ import com.example.unplayedgameslist.data.db.GameDatabase
 import com.example.unplayedgameslist.data.repository.ApiDataSource
 import com.example.unplayedgameslist.data.repository.GameRepository
 import com.example.unplayedgameslist.data.PreferencesManager
+import com.example.unplayedgameslist.data.api.SteamStoreApiService
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -15,23 +19,28 @@ import retrofit2.converter.gson.GsonConverterFactory
 class App : Application() {
     companion object {
         private const val STEAM_BASE_URL: String = "https://api.steampowered.com/"
+        private const val STEAM_STORE_BASE_URL :String = "https://store.steampowered.com/api/"
 
         lateinit var prefsManager: PreferencesManager
         lateinit var gameRepository: GameRepository
     }
 
     private lateinit var retrofit: Retrofit
+    private lateinit var storeRetrofit: Retrofit
     private lateinit var gameDatabase: GameDatabase
 
     override fun onCreate() {
         super.onCreate()
 
-        // Inicializamos PrefernecesManager con el contexto de la aplicación
+        // Inicializamos PreferencesManager con el contexto de la aplicación
         prefsManager = PreferencesManager(applicationContext)
 
         initDatabase()
         initApi()
         initRepository()
+
+        // Llamar a la función para sincronizar datos
+        //initializeDataSynchronization()
     }
 
     private fun initApi() {
@@ -51,6 +60,13 @@ class App : Application() {
             .client(okHttpClient) // cliente personalizado con interceptor
             .addConverterFactory(GsonConverterFactory.create())
             .build()
+
+        // Inicialización del Retrofit para la API de la tienda (Steam Store API)
+        storeRetrofit = Retrofit.Builder()
+            .baseUrl(STEAM_STORE_BASE_URL)
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
     }
 
     private fun initDatabase() {
@@ -59,9 +75,34 @@ class App : Application() {
 
     private fun initRepository() {
         val apiService = retrofit.create(SteamApiService::class.java)
-        val apiDataSource = ApiDataSource(apiService)
+        val storeApiService = storeRetrofit.create(SteamStoreApiService::class.java)
+
+        val apiDataSource = ApiDataSource(apiService, storeApiService)
 
         gameRepository = GameRepository(apiDataSource, gameDatabase.gameDao())
     }
+
+    /**
+     * Ejecuta la sincronización de datos en una coroutine al iniciar la aplicación.
+     */
+    private fun initializeDataSynchronization() {
+        val apiKey = prefsManager.getSteamAPI() // Obtén la API key del usuario
+        val steamId64 = prefsManager.getSteamID64() // Obtén el SteamID del usuario
+
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                if (apiKey != null && steamId64 != null) {
+                    Log.d("App", "Sincronizando datos del usuario.")
+                    gameRepository.synchronizeData(apiKey, steamId64)
+                    Log.d("App", "Sincronización completada con éxito.")
+                } else {
+                    Log.w("App", "API Key o Steam ID no configurados.")
+                }
+            } catch (e: Exception) {
+                Log.e("App", "Error durante la sincronización de datos", e)
+            }
+        }
+    }
 }
+
 

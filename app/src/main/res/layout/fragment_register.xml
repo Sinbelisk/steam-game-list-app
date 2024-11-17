@@ -5,7 +5,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    tools:context=".ui.fragments.RegisterFragment">
+    android:gravity="center"
+    tools:context=".ui.fragments.RegisterFragment"
+    android:background="#171A21">
 
     <EditText
         android:id="@+id/etSteamIDRegister"
@@ -14,7 +16,11 @@
         android:autofillHints=""
         android:hint="SteamID"
         android:inputType="text"
-        android:minHeight="48dp" />
+        android:minHeight="48dp"
+        android:textColor="#D1D1D1"
+        android:background="#333333"
+        android:textColorHint="#D1D1D1"
+        android:layout_marginBottom="16dp"/>
 
     <EditText
         android:id="@+id/etPasswordRegister"
@@ -23,7 +29,11 @@
         android:autofillHints=""
         android:hint="Contraseña"
         android:inputType="textPassword"
-        android:minHeight="48dp" />
+        android:minHeight="48dp"
+        android:textColor="#D1D1D1"
+        android:background="#333333"
+        android:textColorHint="#D1D1D1"
+        android:layout_marginBottom="16dp"/>
 
     <EditText
         android:id="@+id/etSteamApi"
@@ -32,12 +42,18 @@
         android:autofillHints=""
         android:hint="Steam API KEY"
         android:inputType="text"
-        android:minHeight="48dp" />
+        android:minHeight="48dp"
+        android:textColor="#D1D1D1"
+        android:background="#333333"
+        android:textColorHint="#D1D1D1"
+        android:layout_marginBottom="32dp"/>
 
     <Button
         android:id="@+id/btnRegisterRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Registrarse" />
+        android:background="#00A9E0"
+        android:text="Registrarse"
+        android:textColor="#311B92"/>
 
 </LinearLayout>

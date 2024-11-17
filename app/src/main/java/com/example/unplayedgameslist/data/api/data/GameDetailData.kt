@@ -8,7 +8,8 @@ data class GameDetailData(
     @SerializedName("short_description") val shortDescription: String?,
     @SerializedName("developers") val developers: List<String>?,
     @SerializedName("publishers") val publishers: List<String>?,
-    @SerializedName("genres") val genres: List<Genre>?
+    @SerializedName("genres") val genres: List<Genre>?,
+    @SerializedName("header_image") val header: String?
 ) {
     data class Genre(
         @SerializedName("id") val id: Int?,

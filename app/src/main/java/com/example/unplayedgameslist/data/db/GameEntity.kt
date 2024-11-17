@@ -5,9 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "games")
 data class GameEntity(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,  // ID autogenerado para la base de datos
-
+    @PrimaryKey
     val steamId: Int,  // ID del juego en Steam
 
     val name: String,  // Nombre del juego

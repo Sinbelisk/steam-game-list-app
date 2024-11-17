@@ -5,4 +5,12 @@
     <string name="gameState">Estado: %s</string>
     <string name="playedHours">Horas jugadas: %d</string>
     <string name="gameName">%s</string>
+    <string name="game_image">image\n</string>
+    <string name="developers" />
+    <string name="publishers" />
+
+    <string name="unknown_release_date">Fecha de lanzamiento desconocida</string>
+    <string name="unknown_genre">Género no disponible</string>
+    <string name="unknown_developers">Desarrolladores desconocidos</string>
+    <string name="unknown_publishers">Publicadores desconocidos</string>
 </resources>

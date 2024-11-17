@@ -12,7 +12,8 @@ object GameDetailMapper {
             shortDescription = details.shortDescription,
             developers = details.developers?.joinToString(", "),
             publishers = details.publishers?.joinToString(", "),
-            genres = details.genres?.joinToString(", ") ?: ""
+            genres = details.genres?.joinToString(", ") ?: "",
+            header = details.header
         )
     }
 }

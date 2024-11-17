@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="8dp">
+    android:padding="8dp"
+    android:background="#333333"> <!-- Fondo oscuro para cada item -->
 
     <ImageView
         android:id="@+id/gameImage"
@@ -25,6 +26,7 @@
             android:layout_height="wrap_content"
             android:text="@string/gameName"
             android:textSize="16sp"
+            android:textColor="#FFFFFF"
             android:textStyle="bold"/>
 
         <TextView
@@ -33,7 +35,7 @@
             android:layout_height="wrap_content"
             android:text="@string/playedHours"
             android:textSize="14sp"
-            android:textColor="@android:color/darker_gray"/>
+            android:textColor="#D1D1D1"/> <!-- Gris claro para las horas jugadas -->
 
         <TextView
             android:id="@+id/status"
@@ -41,7 +43,8 @@
             android:layout_height="wrap_content"
             android:text="@string/gameState"
             android:textSize="14sp"
-            android:textColor="@android:color/darker_gray"/>
+            android:textColor="#D1D1D1"/> <!-- Gris claro para el estado del juego -->
     </LinearLayout>
 
 </LinearLayout>
+

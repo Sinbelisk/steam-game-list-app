@@ -14,7 +14,11 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.unplayedgameslist.R
 import com.example.unplayedgameslist.data.db.GameEntity
 
-class GameAdapter(private var games: List<GameEntity>, private val context: Context) : RecyclerView.Adapter<GameAdapter.GameViewHolder>() {
+class GameAdapter(
+    private var games: List<GameEntity>,
+    private val context: Context,
+    private val onGameClickListener: (GameEntity) -> Unit // Callback
+) : RecyclerView.Adapter<GameAdapter.GameViewHolder>() {
 
     inner class GameViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val gameName: TextView = itemView.findViewById(R.id.gameName)
@@ -25,6 +29,11 @@ class GameAdapter(private var games: List<GameEntity>, private val context: Cont
             gameName.text = getFormattedString(R.string.gameName, game.name)
             gameTotalHours.text = getFormattedString(R.string.playedHours, game.playtime / 60)
             loadImage(game.imageUrl)
+
+            // Establecer el listener en el clic
+            itemView.setOnClickListener {
+                onGameClickListener(game) // Llamar al listener
+            }
         }
 
         private fun loadImage(imageUrl: String?) {

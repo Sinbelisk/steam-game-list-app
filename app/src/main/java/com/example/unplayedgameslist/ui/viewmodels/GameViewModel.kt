@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewModelScope
 import com.example.unplayedgameslist.App
-import com.example.unplayedgameslist.data.DbApiMapper.Companion.toEntity
 import com.example.unplayedgameslist.data.db.GameEntity
 import com.example.unplayedgameslist.data.repository.GameRepository
 import com.example.unplayedgameslist.ui.SortType

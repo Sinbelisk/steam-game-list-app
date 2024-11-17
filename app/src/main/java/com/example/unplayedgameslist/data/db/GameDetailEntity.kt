@@ -16,5 +16,7 @@ data class GameDetailEntity(
 
     val publishers: String?,  // Editores
 
-    val genres: String?  // Géneros del juego
+    val genres: String?,  // Géneros del juego
+
+    val header : String?
 )

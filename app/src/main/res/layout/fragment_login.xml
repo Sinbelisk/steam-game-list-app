@@ -5,8 +5,11 @@
     android:layout_height="match_parent"
     android:padding="16dp"
     android:orientation="vertical"
-    tools:context=".ui.fragments.LoginFragment">
+    android:gravity="center"
+    tools:context=".ui.fragments.LoginFragment"
+    android:background="#171A21">
 
+    <!-- EditText para SteamID -->
     <EditText
         android:id="@+id/etSteamID"
         android:layout_width="match_parent"
@@ -14,8 +17,13 @@
         android:autofillHints=""
         android:hint="SteamID"
         android:inputType="text"
-        android:minHeight="48dp" />
+        android:minHeight="48dp"
+        android:textColor="#D1D1D1"
+        android:background="#333333"
+        android:textColorHint="#D1D1D1"
+        android:layout_marginBottom="16dp" />
 
+    <!-- EditText para Contraseña -->
     <EditText
         android:id="@+id/etPassword"
         android:layout_width="match_parent"
@@ -23,18 +31,43 @@
         android:autofillHints=""
         android:hint="Contraseña"
         android:inputType="textPassword"
-        android:minHeight="48dp" />
+        android:minHeight="48dp"
+        android:textColor="#D1D1D1"
+        android:background="#333333"
+        android:textColorHint="#D1D1D1"
+        android:layout_marginBottom="32dp" />
 
-    <Button
-        android:id="@+id/btnLogin"
+    <!-- LinearLayout para los botones -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Iniciar Sesión" />
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="32dp"
+        android:weightSum="2">
 
-    <Button
-        android:id="@+id/btnRegister"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Registrarse" />
+        <!-- Botón para Iniciar sesión -->
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#00A9E0"
+            android:text="Iniciar Sesión"
+            android:textColor="#311B92"
+            android:layout_marginEnd="8dp" />
+
+        <!-- Botón para Registrarse -->
+        <Button
+            android:id="@+id/btnRegister"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#A0A0A0"
+            android:text="Registrarse"
+            android:textColor="#4A148C"
+            android:layout_marginStart="8dp" /> <!-- Separación entre botones -->
+
+    </LinearLayout>
 
 </LinearLayout>

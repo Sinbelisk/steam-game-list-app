@@ -3,11 +3,10 @@ package com.example.unplayedgameslist.data.repository
 import com.example.unplayedgameslist.data.db.GameEntity
 
 import android.util.Log
-import androidx.annotation.IntegerRes
 import com.example.unplayedgameslist.data.api.mappers.GameDetailMapper
 import com.example.unplayedgameslist.data.api.mappers.GameEntityMapper
 import com.example.unplayedgameslist.data.db.GameDao
-import com.example.unplayedgameslist.data.db.UserAddedGameEntity
+import com.example.unplayedgameslist.data.db.GameDetailEntity
 import com.example.unplayedgameslist.ui.SortType
 
 class GameRepository(
@@ -49,6 +48,7 @@ class GameRepository(
             Log.e("SynchronizeData", "Error al sincronizar los datos", e)
         }
     }
+
 
 
     suspend fun getSteamID64(apiKey: String, vanityUrl: String): Long? {

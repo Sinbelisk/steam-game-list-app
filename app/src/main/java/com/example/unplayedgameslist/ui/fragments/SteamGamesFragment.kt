@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.unplayedgameslist.App
+import com.example.unplayedgameslist.R
 import com.example.unplayedgameslist.databinding.FragmentSteamGamesBinding
 import com.example.unplayedgameslist.ui.SortType
 import com.example.unplayedgameslist.ui.adapters.GameAdapter
@@ -50,7 +51,12 @@ class SteamGamesFragment : Fragment() {
     private fun initRecyclerView(binding: FragmentSteamGamesBinding) {
         recyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        gameAdapter = GameAdapter(emptyList(), requireContext())  // Lista vacía inicialmente
+
+        gameAdapter = GameAdapter(emptyList(), requireContext()) { game ->
+            val gameDetailFragment = GameDetailDialogFragment(game)
+            gameDetailFragment.show(requireActivity().supportFragmentManager, "game_detail")
+        }
+
         recyclerView.adapter = gameAdapter
     }
 
@@ -79,10 +85,19 @@ class SteamGamesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Carga el fragmento de SettingsBar en la parte inferior
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.settings_bar_container, NavigationMenuFragment.newInstance())
+            .commit()
+
         // Carga inicial de juegos según la configuración actual
         val sortOption = settingsDialogViewModel.sortOption.value ?: SortType.DESC
         val excludePlayed = settingsDialogViewModel.excludePlayed.value ?: false
         loadGames(sortOption, excludePlayed)
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            // Do nothing or add custom logic to disable back navigation
+        }
     }
 }
 

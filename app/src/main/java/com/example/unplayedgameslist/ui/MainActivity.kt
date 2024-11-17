@@ -31,11 +31,6 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, LoginFragment())
                 .commit()
-
-            // Carga el fragmento de SettingsBar en la parte inferior
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.settings_bar_container, NavigationMenuFragment.newInstance())
-                .commit()
         }
 
     }

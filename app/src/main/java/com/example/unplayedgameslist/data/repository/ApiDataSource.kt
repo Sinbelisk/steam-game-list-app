@@ -3,10 +3,11 @@ package com.example.unplayedgameslist.data.repository
 import android.util.Log
 import com.example.unplayedgameslist.data.api.data.OwnedGameData
 import com.example.unplayedgameslist.data.api.SteamApiService
+import com.example.unplayedgameslist.data.api.SteamStoreApiService
 import com.example.unplayedgameslist.data.api.responses.GameDetailResponse
 import retrofit2.Response
 
-class ApiDataSource(private val apiService: SteamApiService) {
+class ApiDataSource(private val apiService: SteamApiService, private val storeApiService: SteamStoreApiService) {
 
     // Obtiene los juegos de un usuario desde la API
     suspend fun fetchOwnedGames(apiKey: String, steamId64: Long): List<OwnedGameData>? {
@@ -19,7 +20,7 @@ class ApiDataSource(private val apiService: SteamApiService) {
     // Obtiene detalles de un juego específico
     suspend fun fetchGameDetails(appId: Int): Response<Map<String, GameDetailResponse>>? {
         return safeApiCall(
-            apiCall = { apiService.getGameDetails(appId) },
+            apiCall = { storeApiService.getGameDetails(appId) },
             onSuccess = { it }
         )
     }

@@ -31,7 +31,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         }
     }
 
-
     private fun setupActions() {
         binding.btnLogin.setOnClickListener {
                 val steamId = binding.etSteamID.text.toString()
@@ -44,7 +43,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         loginViewModel.loginStatus.observe(viewLifecycleOwner) { isSuccess ->
             if (isSuccess) {
                 Toast.makeText(requireContext(), "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show()
-
+                changeActivity()
             } else {
                 Toast.makeText(requireContext(), "Credenciales incorrectas", Toast.LENGTH_SHORT).show()
             }
@@ -52,6 +51,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
         binding.btnRegister.setOnClickListener {
             (activity as MainActivity).changeFragment(RegisterFragment())
+
         }
     }
 

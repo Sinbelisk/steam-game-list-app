@@ -7,7 +7,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.unplayedgameslist.App
-import com.example.unplayedgameslist.data.DbApiMapper.Companion.toEntity
 import com.example.unplayedgameslist.data.PreferencesManager
 import com.example.unplayedgameslist.data.repository.GameRepository
 import kotlinx.coroutines.launch

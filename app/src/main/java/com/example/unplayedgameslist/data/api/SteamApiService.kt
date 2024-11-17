@@ -1,6 +1,5 @@
 package com.example.unplayedgameslist.data.api
 
-import com.example.unplayedgameslist.data.api.responses.GameDetailResponse
 import com.example.unplayedgameslist.data.api.responses.OwnedGamesResponse
 import com.example.unplayedgameslist.data.api.responses.ResolveVanityResponse
 import retrofit2.Response
@@ -21,14 +20,6 @@ interface SteamApiService {
         @Query("format") format: String = "json"
     ): Response<OwnedGamesResponse>
 
-    /**
-     * Interfaz de steam para conseguir los datos de la tienda de un juego, en terminos simples
-     * es para conseguir sus detalles.
-     */
-    @GET("appdetails")
-    suspend fun getGameDetails(
-        @Query("appids") appId: Int
-    ): Response<Map<String, GameDetailResponse>>
 
     /**
      * Esta interfaz de la API se utiliza para traducir el identificador de texto a el identificador
