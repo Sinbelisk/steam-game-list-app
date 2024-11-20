@@ -24,12 +24,6 @@ class MainActivity : AppCompatActivity() {
     // ViewBinding instance to access UI elements in the activity
     private lateinit var binding: ActivityMainBinding
 
-    // PreferencesManager instance for accessing user preferences
-    private val prefs = App.prefsManager
-
-    // Repository for managing game data
-    private val repository = App.gameRepository
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

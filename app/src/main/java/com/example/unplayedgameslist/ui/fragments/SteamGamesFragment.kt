@@ -122,5 +122,16 @@ class SteamGamesFragment : Fragment() {
 
         }
     }
+
+    override fun onStop() {
+        super.onStop()
+        val settingsBarFragment = requireActivity()
+            .supportFragmentManager.findFragmentById(R.id.settings_bar_container)
+        settingsBarFragment?.let {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .hide(it)
+                .commit()
+        }
+    }
 }
 

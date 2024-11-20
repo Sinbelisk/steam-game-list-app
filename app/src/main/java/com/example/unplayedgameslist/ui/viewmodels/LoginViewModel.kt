@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.unplayedgameslist.App
 import com.example.unplayedgameslist.data.repository.GameRepository
+import com.example.unplayedgameslist.ui.SortType
 import kotlinx.coroutines.launch
 
 /**
@@ -28,19 +29,20 @@ class LoginViewModel : ViewModel() {
      * @param password: The password entered by the user.
      */
     fun login(steamId: String, password: String) {
-        val savedUser = prefs.getSteamID()  // Retrieve saved Steam ID
+        val savedUser = prefs.getSteamID()?.lowercase()?.trim()  // Retrieve saved Steam ID
         val savedPass = prefs.getPassword()  // Retrieve saved password
 
         Log.d("prueba de credenciales", "$savedPass , $savedUser")  // Log the credentials for debugging
 
         // Example logic for verifying credentials
-        if (steamId.trim() == savedUser?.trim() && password == savedPass) {
+        if (steamId.trim().lowercase().trim() == savedUser?.trim() && password == savedPass) {
             _loginStatus.value = true  // Set login status to true
             prefs.setUserLoginStatus(true)  // Save login status
         } else {
             _loginStatus.value = false  // Set login status to false
             prefs.setUserLoginStatus(false)  // Update login status in preferences
         }
+
     }
 
     /**

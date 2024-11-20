@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.unplayedgameslist.App
 import com.example.unplayedgameslist.data.PreferencesManager
 import com.example.unplayedgameslist.data.repository.GameRepository
+import com.example.unplayedgameslist.ui.SortType
 import kotlinx.coroutines.launch
 
 /**
@@ -52,6 +53,9 @@ class RegisterViewModel(application: Application) : AndroidViewModel(application
             // If any field is invalid, set registration status to false
             _registerStatus.value = false
         }
+
+        // Inicializa una configuración por defecto al registrar
+        App.prefsManager.saveConfig(SortType.DESC, true)
     }
 
     /**
